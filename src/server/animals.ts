@@ -6,6 +6,7 @@ import { animals, animalSales, auditLogs, listings, sheds, sires } from "@/db/sc
 import { can } from "@/lib/rbac";
 import { err, ok, type Result } from "@/lib/result";
 import type { Actor } from "./team";
+import { addDays } from "./common";
 
 /* ───────────────────────── List ───────────────────────── */
 
@@ -420,15 +421,7 @@ export async function getAnimalProfile(db: DB, farmId: string, tag: string, gest
 
 export type AnimalProfile = NonNullable<Awaited<ReturnType<typeof getAnimalProfile>>>;
 
-export function addDays(isoDay: string, days: number) {
-  const d = new Date(`${isoDay}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + days);
-  return d.toISOString().slice(0, 10);
-}
-
-export function daysBetween(a: string, b: string) {
-  return Math.round((new Date(`${b}T00:00:00Z`).getTime() - new Date(`${a}T00:00:00Z`).getTime()) / 86_400_000);
-}
+export { addDays, daysBetween } from "./common";
 
 /* ───────────────────────── Create / edit / exit ───────────────────────── */
 
