@@ -2,7 +2,7 @@ import clsx from "clsx";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Badge, buttonClass, Card, EarTag, PageHead } from "@/components/ui";
+import { Badge, buttonClass, EarTag, EmptyState, PageHead, PillTabs } from "@/components/ui";
 import { getDb } from "@/db";
 import { getDictionary } from "@/i18n";
 import type { AnimalsDict } from "@/i18n/animals";
@@ -23,7 +23,6 @@ import {
   type Sort,
   type Status,
 } from "@/server/animals";
-import { BandTabs } from "../NavLinks";
 import { AnimalPhoto } from "./AnimalPhoto";
 import { FilterBar } from "./FilterBar";
 
@@ -73,13 +72,14 @@ export default async function AnimalsPage({ searchParams }: { searchParams: Prom
         subtitle={fill(a.onFarm, { n: fmt.n(counts.all) })}
         actions={
           can(ctx.role, "animal.write") ? (
-            <Link href="/app/animals/new" className={buttonClass("accent")}>
+            <Link href="/app/animals/new" className={buttonClass("primary")}>
               + {a.add}
             </Link>
           ) : undefined
         }
       >
-        <BandTabs
+        <PillTabs
+          label={a.title}
           current={group}
           items={GROUPS.map((g) => ({
             key: g,
@@ -90,7 +90,7 @@ export default async function AnimalsPage({ searchParams }: { searchParams: Prom
         />
       </PageHead>
 
-      <div className="page-column flex flex-col gap-6 py-8">
+      <div className="page-column flex flex-col gap-5 pt-5 pb-10">
         <Suspense>
           <FilterBar
             t={a}
@@ -100,19 +100,19 @@ export default async function AnimalsPage({ searchParams }: { searchParams: Prom
           />
         </Suspense>
 
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-ink pb-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm font-medium text-ink-2 tabular" aria-live="polite">
             {fill(a.showing, { from: fmt.n(from), to: fmt.n(to), total: fmt.n(total) })}
           </p>
-          <div className="flex rounded-full border border-line-strong p-0.5" role="group" aria-label={a.view.grid + " / " + a.view.table}>
+          <div className="flex rounded-xl bg-surface-2 p-1" role="group" aria-label={a.view.grid + " / " + a.view.table}>
             {(["grid", "table"] as const).map((v) => (
               <Link
                 key={v}
                 href={href({ view: v === "grid" ? undefined : v, page: page > 1 ? String(page) : undefined })}
                 aria-current={view === v ? "true" : undefined}
                 className={clsx(
-                  "inline-flex min-h-10 items-center rounded-full px-4 text-sm font-semibold no-underline",
-                  view === v ? "bg-ink text-surface" : "text-ink-2 hover:text-ink",
+                  "inline-flex min-h-9 items-center rounded-lg px-4 text-sm font-semibold no-underline",
+                  view === v ? "bg-surface text-ink shadow-sm" : "text-muted hover:text-ink",
                 )}
               >
                 {a.view[v]}
@@ -122,16 +122,18 @@ export default async function AnimalsPage({ searchParams }: { searchParams: Prom
         </div>
 
         {items.length === 0 ? (
-          <Card className="py-12 text-center">
-            <p className="font-display text-xl font-bold">{counts.all === 0 ? a.emptyFarm : a.none}</p>
-            {counts.all === 0 && can(ctx.role, "animal.write") ? (
-              <Link href="/app/animals/new" className={buttonClass("primary", "mt-4")}>
-                + {a.add}
-              </Link>
-            ) : null}
-          </Card>
+          <EmptyState
+            title={counts.all === 0 ? a.emptyFarm : a.none}
+            action={
+              counts.all === 0 && can(ctx.role, "animal.write") ? (
+                <Link href="/app/animals/new" className={buttonClass("primary")}>
+                  + {a.add}
+                </Link>
+              ) : undefined
+            }
+          />
         ) : view === "grid" ? (
-          <ul className="grid grid-cols-[repeat(auto-fill,minmax(232px,1fr))] gap-5">
+          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fill,minmax(232px,1fr))] sm:gap-5">
             {items.map((item, i) => (
               <li key={item.id} className="rise" style={{ animationDelay: `${Math.min(i, 12) * 30}ms` }}>
                 <AnimalCard item={item} a={a} fmt={fmt} today={today} locale={locale} priority={i < 4} />
@@ -155,8 +157,8 @@ export default async function AnimalsPage({ searchParams }: { searchParams: Prom
                 href={href({ page: p === 1 ? undefined : String(p) })}
                 aria-current={p === page ? "page" : undefined}
                 className={clsx(
-                  "inline-flex size-11 items-center justify-center rounded-full font-mono text-sm no-underline",
-                  p === page ? "bg-ink text-surface" : "text-ink-2 hover:bg-surface-2",
+                  "inline-flex size-11 items-center justify-center rounded-xl text-[15px] font-semibold no-underline",
+                  p === page ? "bg-primary text-white" : "text-ink-2 hover:bg-surface",
                 )}
               >
                 {fmt.n(p)}
@@ -224,7 +226,7 @@ function AnimalCard({
   return (
     <Link
       href={`/app/animals/${encodeURIComponent(item.tag)}`}
-      className="group flex h-full flex-col overflow-hidden rounded-[6px] bg-surface text-ink no-underline transition-transform duration-200 ease-[var(--ease-out-quint)] hover:-translate-y-0.5"
+      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface text-ink no-underline shadow-[var(--shadow-card)] transition duration-200 ease-[var(--ease-out-quint)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-pop)]"
     >
       <div className="relative">
         <AnimalPhoto
@@ -235,20 +237,20 @@ function AnimalCard({
           className="aspect-[4/3] w-full"
           priority={priority}
         />
-        <EarTag tag={item.tag} className="absolute bottom-3 left-3 shadow-sm" />
+        <EarTag tag={item.tag} tone="solid" className="absolute top-3 left-3" />
       </div>
-      <div className="flex flex-1 flex-col gap-3 p-4">
+      <div className="flex flex-1 flex-col gap-2 p-3 sm:gap-3 sm:p-4">
         <div>
-          <p className="font-display text-xl leading-tight font-bold tracking-[-0.01em] group-hover:underline group-hover:decoration-2 group-hover:underline-offset-4">
+          <p className="font-display text-[17px] leading-tight font-bold tracking-[-0.02em] group-hover:text-primary sm:text-[19px]">
             {name === item.tag ? <span className="text-muted">{item.tag}</span> : name}
           </p>
-          <p className="mt-0.5 text-sm text-muted">{subtitleFor(item, a)}</p>
+          <p className="mt-0.5 line-clamp-2 text-[13px] text-muted sm:text-sm">{subtitleFor(item, a)}</p>
         </div>
-        <div className="mt-auto border-t border-dashed border-line-strong pt-3">
+        <div className="mt-auto border-t border-line pt-3">
           <p className="flex items-baseline gap-1.5">
-            <span className="font-mono text-2xl font-medium tabular">{fig.value}</span>
+            <span className="font-display text-xl font-extrabold tracking-[-0.02em] tabular sm:text-2xl">{fig.value}</span>
             {fig.unit ? <span className="text-sm text-muted">{fig.unit}</span> : null}
-            {fig.note ? <span className="ml-auto text-sm text-muted">{fig.note}</span> : null}
+            {fig.note ? <span className="ml-auto hidden text-sm text-muted sm:inline">{fig.note}</span> : null}
           </p>
           {badges.length ? (
             <div className="mt-2 flex flex-wrap gap-1.5">
@@ -267,7 +269,7 @@ function AnimalCard({
 
 function AnimalTable({ items, a, fmt, today, locale }: { items: AnimalListItem[]; a: AnimalsDict; fmt: Fmt; today: string; locale: "bn" | "en" }) {
   return (
-    <div className="overflow-x-auto rounded-[6px] bg-surface">
+    <div className="overflow-x-auto rounded-2xl border border-line bg-surface shadow-[var(--shadow-card)]">
       <table className="w-full min-w-[760px] border-collapse text-left">
         <thead>
           <tr className="text-sm text-muted">
@@ -282,7 +284,7 @@ function AnimalTable({ items, a, fmt, today, locale }: { items: AnimalListItem[]
           {items.map((item) => {
             const fig = keyFigure(item, a, fmt, today);
             return (
-              <tr key={item.id} className="border-b border-line last:border-0 hover:bg-ground/50">
+              <tr key={item.id} className="border-b border-line last:border-0 hover:bg-surface-2/60">
                 <td className="px-4 py-3">
                   <Link href={`/app/animals/${encodeURIComponent(item.tag)}`} className="no-underline">
                     <EarTag tag={item.tag} />
@@ -296,7 +298,7 @@ function AnimalTable({ items, a, fmt, today, locale }: { items: AnimalListItem[]
                 <td className="px-4 py-3 text-ink-2">{subtitleFor(item, a)}</td>
                 <td className="px-4 py-3 text-ink-2 tabular">{fmt.age(item.birthDate, today, a.ageFmt)}</td>
                 <td className="px-4 py-3 text-ink-2">{item.shed ?? "—"}</td>
-                <td className="px-4 py-3 text-right font-mono tabular">
+                <td className="px-4 py-3 text-right font-semibold tabular">
                   {fig.value} <span className="text-sm text-muted">{fig.unit}</span>
                 </td>
                 <td className="px-4 py-3">

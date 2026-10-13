@@ -1,19 +1,21 @@
 import clsx from "clsx";
+import Image from "next/image";
+import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
 /* Small, deliberate set of primitives. Anything bigger lives with its feature. */
 
-type Variant = "primary" | "secondary" | "ghost" | "danger" | "accent";
+type Variant = "primary" | "secondary" | "ghost" | "danger" | "light";
 
 const buttonBase =
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-[15px] font-semibold whitespace-nowrap transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-60";
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 text-[15px] font-semibold whitespace-nowrap transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-60";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-primary text-white hover:bg-primary-hover",
-  accent: "bg-accent text-accent-ink hover:brightness-95",
-  secondary: "border-2 border-ink bg-transparent text-ink hover:bg-ink hover:text-surface",
+  primary: "bg-primary text-white shadow-sm hover:bg-primary-hover",
+  secondary: "border border-line-strong bg-surface text-ink hover:border-primary hover:text-primary",
   ghost: "text-ink-2 hover:bg-surface-2",
-  danger: "border-2 border-danger-ink bg-transparent text-danger-ink hover:bg-danger-bg",
+  danger: "border border-danger-ink/40 bg-surface text-danger-ink hover:bg-danger-bg",
+  light: "bg-white text-deep hover:bg-primary-soft",
 };
 
 export function Button({ variant = "primary", className, ...props }: ComponentProps<"button"> & { variant?: Variant }) {
@@ -57,7 +59,7 @@ export function Field({
 }
 
 const inputBase =
-  "min-h-11 w-full rounded-[10px] border border-line-strong bg-surface px-3 text-[15px] text-ink placeholder:text-muted/70 aria-[invalid=true]:border-danger-ink";
+  "min-h-11 w-full rounded-xl border border-line-strong bg-surface px-3.5 text-[16px] text-ink transition-colors placeholder:text-muted/70 hover:border-muted/60 focus:border-primary aria-[invalid=true]:border-danger-ink";
 
 export function Input({ className, ...props }: ComponentProps<"input">) {
   return <input className={clsx(inputBase, className)} {...props} />;
@@ -71,9 +73,14 @@ export function Textarea({ className, ...props }: ComponentProps<"textarea">) {
   return <textarea className={clsx(inputBase, "min-h-24 py-2.5", className)} {...props} />;
 }
 
-/** Ledger-paper card on the yard ground. `flush` drops the padding for edge-to-edge rows. */
+/** White card with a soft shadow. `flush` drops the padding for edge-to-edge rows. */
 export function Card({ className, flush = false, ...props }: ComponentProps<"section"> & { flush?: boolean }) {
-  return <section className={clsx("rounded-[6px] bg-surface", !flush && "p-5", className)} {...props} />;
+  return (
+    <section
+      className={clsx("rounded-2xl border border-line bg-surface shadow-[var(--shadow-card)]", !flush && "p-5 sm:p-6", className)}
+      {...props}
+    />
+  );
 }
 
 export function Notice({ tone = "warn", children }: { tone?: "warn" | "danger" | "ok"; children: ReactNode }) {
@@ -83,7 +90,7 @@ export function Notice({ tone = "warn", children }: { tone?: "warn" | "danger" |
     ok: "bg-primary-soft text-primary-ink",
   };
   return (
-    <p role={tone === "danger" ? "alert" : "status"} className={clsx("rounded-[10px] px-3.5 py-2.5 text-sm font-medium", tones[tone])}>
+    <p role={tone === "danger" ? "alert" : "status"} className={clsx("rounded-xl px-4 py-3 text-[15px] font-medium", tones[tone])}>
       {children}
     </p>
   );
@@ -97,12 +104,12 @@ export function Badge({ tone = "plain", children, className }: { tone?: BadgeTon
     green: "bg-primary-soft text-primary-ink",
     warn: "bg-warn-bg text-warn-ink",
     danger: "bg-danger-bg text-danger-ink",
-    dark: "bg-ink text-surface",
+    dark: "bg-deep text-white",
   };
   return (
     <span
       className={clsx(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-[13px] font-semibold whitespace-nowrap",
+        "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[13px] font-semibold whitespace-nowrap",
         tones[tone],
         className,
       )}
@@ -112,12 +119,13 @@ export function Badge({ tone = "plain", children, className }: { tone?: BadgeTon
   );
 }
 
-/** An ear tag, set in mono like the plastic tag itself. */
-export function EarTag({ tag, className }: { tag: string; className?: string }) {
+/** An ear tag: the animal's ID, set like the printed tag. */
+export function EarTag({ tag, className, tone = "light" }: { tag: string; className?: string; tone?: "light" | "solid" }) {
   return (
     <span
       className={clsx(
-        "keep-mono inline-flex items-center rounded-[4px] bg-accent px-1.5 py-px font-mono text-[13px] font-medium tracking-wide text-accent-ink",
+        "inline-flex items-center rounded-md px-1.5 py-px text-[13px] font-bold tracking-wide tabular",
+        tone === "solid" ? "bg-white/95 text-deep shadow-sm" : "bg-primary-soft text-primary-ink",
         className,
       )}
     >
@@ -130,43 +138,179 @@ export function Logo({ size = 40 }: { size?: number }) {
   return (
     <span
       aria-hidden="true"
-      style={{ width: size, height: size, fontSize: size * 0.56 }}
-      className="inline-flex shrink-0 items-center justify-center rounded-full bg-accent font-bold text-accent-ink"
+      style={{ width: size, height: size, fontSize: size * 0.54 }}
+      className="inline-flex shrink-0 items-center justify-center rounded-xl bg-primary font-bold text-white"
     >
       খ
     </span>
   );
 }
 
+export type Photo = { url: string; credit?: string | null; sourceUrl?: string | null };
+
 /**
- * The dark band at the top of each page. It continues the header so logo, title
- * and the page's own tabs read as one block.
+ * Page header. With a photo it becomes a banner: the picture fills a rounded panel and the
+ * title sits on a solid forest-green block (never text over a gradient).
  */
 export function PageHead({
   title,
   subtitle,
+  eyebrow,
   actions,
+  photo,
   children,
 }: {
   title: ReactNode;
   subtitle?: ReactNode;
+  eyebrow?: ReactNode;
   actions?: ReactNode;
+  photo?: Photo | null;
   children?: ReactNode;
 }) {
-  return (
-    <div className="bg-deep text-surface">
-      <div className="page-column pt-6 pb-0 md:pt-10">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="min-w-0">
-            <h1 className="font-display text-[length:var(--text-title)] leading-[1.02] font-extrabold tracking-[-0.02em] text-balance text-[#f1ead9]">
-              {title}
-            </h1>
-            {subtitle ? <p className="mt-2 text-deep-ink">{subtitle}</p> : null}
+  if (photo) {
+    return (
+      <div className="page-column pt-4 lg:pt-8">
+        <div className="relative isolate overflow-hidden rounded-3xl bg-deep">
+          <Image src={photo.url} alt="" fill priority sizes="(min-width: 1240px) 1160px, 100vw" className="drift -z-10 object-cover" />
+          <div className="flex min-h-[280px] flex-col justify-end p-4 sm:min-h-[340px] sm:p-6">
+            <div className="on-dark max-w-2xl rounded-2xl bg-deep/95 p-5 text-white sm:p-7">
+              {eyebrow ? <p className="text-sm font-semibold text-accent">{eyebrow}</p> : null}
+              <h1 className="mt-1 text-[length:var(--text-title)] leading-[1.1] font-extrabold text-balance">{title}</h1>
+              {subtitle ? <p className="mt-2 text-deep-ink">{subtitle}</p> : null}
+              {actions ? <div className="mt-4 flex flex-wrap gap-2">{actions}</div> : null}
+            </div>
           </div>
-          {actions ? <div className="flex flex-wrap gap-2 pb-1">{actions}</div> : null}
+          {photo.credit ? (
+            <p className="absolute top-3 right-4 rounded-full bg-black/45 px-2.5 py-0.5 text-[12px] text-white/90">
+              {photo.sourceUrl ? (
+                <a href={photo.sourceUrl} target="_blank" rel="noreferrer" className="text-white/90 no-underline hover:underline">
+                  {photo.credit}
+                </a>
+              ) : (
+                photo.credit
+              )}
+            </p>
+          ) : null}
         </div>
-        {children ? <div className="mt-6">{children}</div> : <div className="h-8" />}
+        {children ? <div className="mt-5">{children}</div> : null}
       </div>
+    );
+  }
+  return (
+    <div className="page-column pt-6 lg:pt-10">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="min-w-0">
+          {eyebrow ? <p className="text-sm font-semibold text-primary">{eyebrow}</p> : null}
+          <h1 className="text-[length:var(--text-title)] leading-[1.1] font-extrabold text-balance">{title}</h1>
+          {subtitle ? <p className="mt-1.5 text-[17px] text-muted">{subtitle}</p> : null}
+        </div>
+        {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
+      </div>
+      {children ? <div className="mt-5">{children}</div> : null}
     </div>
+  );
+}
+
+/** Link tabs as pills, each with an optional count. Each tab is a URL. */
+export function PillTabs({
+  items,
+  current,
+  label,
+}: {
+  items: { key: string; href: string; label: string; count?: string }[];
+  current: string;
+  label: string;
+}) {
+  return (
+    <nav aria-label={label} className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1 [scrollbar-width:none]">
+      {items.map((item) => {
+        const active = item.key === current;
+        return (
+          <Link
+            key={item.key}
+            href={item.href}
+            aria-current={active ? "page" : undefined}
+            className={clsx(
+              "inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full px-4 text-[15px] font-semibold no-underline transition-colors",
+              active ? "bg-primary text-white" : "bg-surface text-ink-2 ring-1 ring-line hover:text-primary hover:ring-primary/40",
+            )}
+          >
+            {item.label}
+            {item.count ? (
+              <span className={clsx("text-[13px] font-medium", active ? "text-white/80" : "text-muted")}>{item.count}</span>
+            ) : null}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
+export function Section({ title, aside, children, id }: { title: string; aside?: ReactNode; children: ReactNode; id?: string }) {
+  return (
+    <section className="flex min-w-0 flex-col gap-4" aria-labelledby={id}>
+      <h2 id={id} className="section-title">
+        <span>{title}</span>
+        {aside ? <span className="font-sans text-sm font-normal tracking-normal text-muted">{aside}</span> : null}
+      </h2>
+      {children}
+    </section>
+  );
+}
+
+export type StatTone = "green" | "warn" | "danger" | undefined;
+
+export function StatCard({
+  label,
+  value,
+  unit,
+  note,
+  tone,
+  icon,
+  href,
+}: {
+  label: string;
+  value: string;
+  unit?: string;
+  note?: string;
+  tone?: StatTone;
+  icon?: ReactNode;
+  href?: string;
+}) {
+  const accent = tone === "green" ? "text-primary" : tone === "warn" ? "text-warn-ink" : tone === "danger" ? "text-danger-ink" : "text-ink";
+  const body = (
+    <>
+      <div className="flex items-start justify-between gap-3">
+        <span className="text-[15px] font-medium text-muted">{label}</span>
+        {icon ? (
+          <span aria-hidden="true" className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary">
+            {icon}
+          </span>
+        ) : null}
+      </div>
+      <span className={clsx("mt-1 block font-display text-[30px] leading-tight font-extrabold tracking-[-0.02em] tabular", accent)}>
+        {value}
+        {unit ? <span className="ml-1.5 font-sans text-[15px] font-medium tracking-normal text-muted">{unit}</span> : null}
+      </span>
+      {note ? <span className="mt-1 block text-sm text-muted">{note}</span> : null}
+    </>
+  );
+  const cls = "block rounded-2xl border border-line bg-surface p-5 shadow-[var(--shadow-card)]";
+  return href ? (
+    <Link href={href} className={clsx(cls, "text-ink no-underline transition-colors hover:border-primary/40")}>
+      {body}
+    </Link>
+  ) : (
+    <div className={cls}>{body}</div>
+  );
+}
+
+export function EmptyState({ title, body, action }: { title: string; body?: string; action?: ReactNode }) {
+  return (
+    <Card className="flex flex-col items-center py-12 text-center">
+      <p className="font-display text-xl font-bold">{title}</p>
+      {body ? <p className="mt-1 max-w-md text-muted">{body}</p> : null}
+      {action ? <div className="mt-5">{action}</div> : null}
+    </Card>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Badge, buttonClass, Card, PageHead } from "@/components/ui";
+import { Badge, buttonClass, Card, PageHead, StatCard } from "@/components/ui";
+import { bannerFor } from "@/lib/photos";
 import { getDb } from "@/db";
 import { getDictionary } from "@/i18n";
 import { DISTRICTS, toBnDigits } from "@/lib/bd";
@@ -37,24 +38,26 @@ export default async function OverviewPage() {
   return (
     <>
       <PageHead
+        photo={bannerFor("overview")}
+        eyebrow={ctx.farm.name}
         title={`${t.dashboard.hello}${ctx.user.name ? `, ${ctx.user.name.split(" ")[0]}` : ""}`}
         subtitle={`${ctx.farm.name} · ${locale === "bn" ? district?.bn : district?.en}${ctx.farm.upazila ? `, ${ctx.farm.upazila}` : ""}`}
         actions={
           hasHerd ? (
-            <Link href="/app/animals" className={buttonClass("accent")}>
+            <Link href="/app/animals" className={buttonClass("light")}>
               {t.nav.animals} →
             </Link>
           ) : undefined
         }
       />
-      <div className="page-column flex flex-col gap-8 py-8">
+      <div className="page-column flex flex-col gap-8 pt-8 pb-12">
 
       {hasHerd ? (
         <section aria-labelledby="herd-title" className="flex flex-col gap-4">
-          <h2 id="herd-title" className="rule-title">
+          <h2 id="herd-title" className="section-title">
             {h.title}
           </h2>
-          <dl className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             <Stat label={h.milkCows} value={num(herd.milkCows)} note={fill(h.milkingDry, { milking: num(herd.milkingCows), dry: num(herd.dryCows) })} />
             <Stat
               label={h.calves}
@@ -67,10 +70,10 @@ export default async function OverviewPage() {
               note={herd.qurbaniAvgKg ? fill(h.avgWeight, { kg: num(herd.qurbaniAvgKg) }) : undefined}
             />
             <Stat label={h.breedingBulls} value={num(herd.breedingBulls)} note={h.breedingNote} />
-          </dl>
+          </div>
 
-          <h2 className="rule-title mt-4">{h.today}</h2>
-          <dl className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4">
+          <h2 className="section-title mt-4">{h.today}</h2>
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
             <Stat
               label={fill(h.milkOn, { date: milkDate })}
               value={`${num(herd.latestMilkLitres)} ${h.litres}`}
@@ -85,7 +88,7 @@ export default async function OverviewPage() {
               tone={herd.underMilkWithdrawal ? "danger" : undefined}
             />
             <Stat label={h.fmdOverdue} value={num(herd.fmdOverdue)} tone={herd.fmdOverdue ? "warn" : undefined} />
-          </dl>
+          </div>
           
         </section>
       ) : null}
@@ -140,13 +143,6 @@ export default async function OverviewPage() {
   );
 }
 
-function Stat({ label, value, note, tone }: { label: string; value: string; note?: string; tone?: "green" | "warn" | "danger" }) {
-  const accent = tone === "green" ? "text-primary-ink" : tone === "warn" ? "text-warn-ink" : tone === "danger" ? "text-danger-ink" : "text-ink";
-  return (
-    <Card>
-      <dt className="text-sm text-muted">{label}</dt>
-      <dd className={`mt-1 font-display text-3xl font-bold ${accent}`}>{value}</dd>
-      {note ? <dd className="mt-0.5 text-sm text-muted">{note}</dd> : null}
-    </Card>
-  );
+function Stat(props: { label: string; value: string; note?: string; tone?: "green" | "warn" | "danger" }) {
+  return <StatCard {...props} />;
 }

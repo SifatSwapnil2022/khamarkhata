@@ -1,64 +1,69 @@
 @import "tailwindcss";
 
 /*
- * Khamar Khata design tokens.
+ * Khamar Khata design tokens — v3, "fresh farm".
  *
- * The palette comes from the farm itself: ledger paper on a dusty yard, soot-dark
- * evenings, leaf green, mustard fields in winter and the clay of the cowshed floor.
- * Colours are flat blocks, never gradients. Components use the Tailwind names
- * (bg-ground, text-ink, bg-deep …); dark mode overrides the variables only.
+ * Deep forest and leaf greens on clean white, with real photographs of Bangladeshi cattle
+ * doing the visual work. Amber and red appear only as status colours. Components use the
+ * Tailwind names (bg-surface, text-ink, bg-primary …); dark mode overrides the variables.
  */
 :root {
-  --ground: #ece4d3; /* yard dust */
-  --surface: #fffaf0; /* ledger paper */
-  --surface-2: #e2d8c3;
-  --ink: #17140f; /* soot */
-  --ink-2: #3b3429;
-  --muted: #645a4b;
-  --line: #d6c9ae;
-  --line-strong: #b9a987;
-  --primary: #1d6a44; /* leaf */
-  --primary-hover: #155236;
-  --primary-soft: #d5e5d1;
-  --primary-ink: #14502f;
-  --deep: #17140f; /* header band */
-  --deep-2: #2a241c;
-  --deep-ink: #d8cfbd;
-  --accent: #f2a900; /* mustard */
-  --accent-ink: #4a3300;
-  --clay: #a8432a;
-  --warn-bg: #fbe4a4;
-  --warn-ink: #5c3f00;
-  --danger-bg: #f5d3c8;
-  --danger-ink: #962c16;
-  --focus: #17140f;
+  --ground: #f3f6f2;
+  --surface: #ffffff;
+  --surface-2: #eaf1eb;
+  --ink: #0f2419;
+  --ink-2: #33473c;
+  --muted: #5a6d61;
+  --line: #e0e8e1;
+  --line-strong: #c5d3c8;
+  --primary: #0f6b3e;
+  --primary-hover: #0a5630;
+  --primary-soft: #e2f1e7;
+  --primary-ink: #0a5630;
+  --fresh: #2f9e5b;
+  --deep: #0c3b25;
+  --deep-2: #12492f;
+  --deep-ink: #cde4d4;
+  --accent: #a6e07f;
+  --accent-ink: #0c3b25;
+  --clay: #c2410c;
+  --warn-bg: #fff2d4;
+  --warn-ink: #7a4a00;
+  --danger-bg: #fde6e2;
+  --danger-ink: #b42318;
+  --focus: #0f6b3e;
+  --shadow-card: 0 1px 2px rgb(15 36 25 / 0.04), 0 8px 24px rgb(15 36 25 / 0.06);
+  --shadow-pop: 0 12px 40px rgb(15 36 25 / 0.16);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --ground: #12100c;
-    --surface: #1d1914;
-    --surface-2: #2a241c;
-    --ink: #f1ead9;
-    --ink-2: #d2c8b3;
-    --muted: #a99d87;
-    --line: #342d23;
-    --line-strong: #4a4033;
-    --primary: #4fae7e;
-    --primary-hover: #66c191;
-    --primary-soft: #1d3626;
-    --primary-ink: #9fdcb9;
-    --deep: #0b0a08;
-    --deep-2: #1f1b15;
-    --deep-ink: #c8bea9;
-    --accent: #f2b51c;
-    --accent-ink: #1a1203;
-    --clay: #e0795c;
-    --warn-bg: #3b2e0e;
-    --warn-ink: #f6d283;
-    --danger-bg: #3d1d14;
-    --danger-ink: #f2ad99;
-    --focus: #f2b51c;
+    --ground: #0a1410;
+    --surface: #111e18;
+    --surface-2: #182a21;
+    --ink: #e9f2ec;
+    --ink-2: #c4d4c9;
+    --muted: #93a99b;
+    --line: #1f3329;
+    --line-strong: #2e4a3b;
+    --primary: #4cc07c;
+    --primary-hover: #66d091;
+    --primary-soft: #143524;
+    --primary-ink: #97e2b5;
+    --fresh: #4cc07c;
+    --deep: #071a11;
+    --deep-2: #0e2b1d;
+    --deep-ink: #b9d6c3;
+    --accent: #a6e07f;
+    --accent-ink: #071a11;
+    --clay: #f08a5d;
+    --warn-bg: #3a2c0a;
+    --warn-ink: #f5cf7c;
+    --danger-bg: #3d1712;
+    --danger-ink: #f6a99a;
+    --focus: #a6e07f;
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-pop: 0 12px 40px rgb(0 0 0 / 0.5);
   }
 }
 
@@ -75,6 +80,7 @@
   --color-primary-hover: var(--primary-hover);
   --color-primary-soft: var(--primary-soft);
   --color-primary-ink: var(--primary-ink);
+  --color-fresh: var(--fresh);
   --color-deep: var(--deep);
   --color-deep-2: var(--deep-2);
   --color-deep-ink: var(--deep-ink);
@@ -86,12 +92,16 @@
   --color-danger-bg: var(--danger-bg);
   --color-danger-ink: var(--danger-ink);
 
-  --font-display: "Bricolage Grotesque Variable", "Hind Siliguri", system-ui, sans-serif;
-  --font-sans: "Instrument Sans Variable", "Hind Siliguri", system-ui, sans-serif;
-  --font-mono: "DM Mono", "Hind Siliguri", ui-monospace, monospace;
+  --font-display: "Manrope Variable", "Noto Sans Bengali Variable", system-ui, sans-serif;
+  --font-sans: "Figtree Variable", "Noto Sans Bengali Variable", system-ui, sans-serif;
+  /* No monospace face: figures use tabular numbers in the UI font, which also covers Bangla digits. */
+  --font-mono: "Figtree Variable", "Noto Sans Bengali Variable", system-ui, sans-serif;
 
-  --text-hero: clamp(2.5rem, 6.5vw, 5.5rem);
-  --text-title: clamp(2rem, 4.2vw, 3.5rem);
+  --text-hero: clamp(2.5rem, 5.2vw, 4.25rem);
+  --text-title: clamp(1.75rem, 3vw, 2.5rem);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-pop: var(--shadow-pop);
 
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -99,9 +109,9 @@
 @layer base {
   :root {
     /* Height of the phone tab bar, including the home-gesture strip. Zero where the bar is hidden. */
-    --tabbar: calc(3.75rem + env(safe-area-inset-bottom));
+    --tabbar: calc(4rem + env(safe-area-inset-bottom));
   }
-  @media (min-width: 48rem) {
+  @media (min-width: 64rem) {
     :root {
       --tabbar: 0px;
     }
@@ -119,77 +129,69 @@
   }
 
   body {
-    font-size: 15px;
-    line-height: 1.5;
+    font-size: 16px;
+    line-height: 1.6;
+    font-variant-numeric: tabular-nums;
   }
 
-  /* Bangla script sits taller than Latin, so it gets more leading. */
   html:lang(bn) body {
-    line-height: 1.7;
+    line-height: 1.75;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
   }
 
   :focus-visible {
     outline: 3px solid var(--focus);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 6px;
   }
-  .bg-deep :focus-visible {
+  .on-dark :focus-visible {
     outline-color: var(--accent);
   }
 
   ::selection {
-    background: var(--accent);
-    color: var(--accent-ink);
+    background: var(--primary-soft);
+    color: var(--primary-ink);
   }
 }
 
 @layer components {
-  /* One page measure everywhere: 1240px with a fluid gutter that clears phone cut-outs. */
   .page-column {
     width: 100%;
     max-width: 1240px;
     margin-inline: auto;
-    padding-left: max(clamp(1.25rem, 4vw, 3rem), env(safe-area-inset-left));
-    padding-right: max(clamp(1.25rem, 4vw, 3rem), env(safe-area-inset-right));
+    padding-left: max(clamp(1rem, 3.5vw, 2.5rem), env(safe-area-inset-left));
+    padding-right: max(clamp(1rem, 3.5vw, 2.5rem), env(safe-area-inset-right));
   }
 
-  /* Section heading with the heavy rule from a ledger column. */
-  .rule-title {
+  .section-title {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: 1rem;
-    padding-bottom: 0.6rem;
-    border-bottom: 2px solid var(--ink);
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 1.25rem;
-    letter-spacing: -0.01em;
-  }
-
-  /* Ledger rules: a quiet nod to the paper khata the app replaces. */
-  .ledger {
-    background-image: repeating-linear-gradient(
-      to bottom,
-      transparent 0,
-      transparent 31px,
-      color-mix(in srgb, var(--deep-ink) 16%, transparent) 31px,
-      color-mix(in srgb, var(--deep-ink) 16%, transparent) 32px
-    );
+    letter-spacing: -0.02em;
   }
 
   .tabular {
     font-variant-numeric: tabular-nums;
   }
 
-  /* DM Mono has no Bangla digits; in Bangla, figures use the display face instead. Ear tags stay mono. */
-  html:lang(bn) .font-mono:not(.keep-mono) {
-    font-family: var(--font-display);
-  }
-
   /* Cards rise gently into place on first paint. */
   .rise {
     animation: rise 520ms var(--ease-out-quint) both;
+  }
+
+  /* Slow drift for hero photographs, so a still image feels like footage. */
+  .drift {
+    animation: drift 24s ease-in-out infinite alternate;
   }
 }
 
@@ -204,11 +206,21 @@
   }
 }
 
+@keyframes drift {
+  from {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.12) translate3d(-1.5%, -1%, 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }

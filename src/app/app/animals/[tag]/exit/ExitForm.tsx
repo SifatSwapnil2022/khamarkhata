@@ -25,7 +25,7 @@ export function ExitForm({ t, tag, today, latestWeight }: { t: AnimalsDict; tag:
           <legend className="text-sm font-semibold">{f.exitWhat}</legend>
           <div className="flex max-w-lg gap-2">
             {(["sold", "dead", "culled"] as const).map((k) => (
-              <label key={k} className="flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-full border border-line-strong bg-surface px-3 has-[:checked]:border-ink has-[:checked]:bg-ink has-[:checked]:text-surface">
+              <label key={k} className="flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-xl border border-line-strong bg-surface px-3 font-medium has-[:checked]:border-primary has-[:checked]:bg-primary-soft has-[:checked]:text-primary-ink has-[:checked]:font-semibold">
                 <input type="radio" name="lifecycle" value={k} checked={kind === k} onChange={() => setKind(k)} className="sr-only" />
                 {f.exitTypes[k]}
               </label>

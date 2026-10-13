@@ -41,6 +41,7 @@ export const en = {
     building: "Khamar Khata is being built in the open. Sign-in, farms and team roles are live; animal records come next.",
   },
   login: {
+    photoBy: "Photo:",
     title: "Sign in with your phone",
     subtitle: "We'll send a 6-digit code by SMS. New here? The same step creates your account.",
     phoneLabel: "Mobile number",
@@ -96,6 +97,11 @@ export const en = {
     createOwn: "Create your own farm instead",
   },
   nav: {
+    more: "More",
+    groupHerd: "Herd",
+    groupBusiness: "Business",
+    groupFarm: "Farm",
+    market: "Market",
     overview: "Overview",
     animals: "Animals",
     dairy: "Dairy",

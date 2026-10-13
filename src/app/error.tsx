@@ -12,7 +12,7 @@ export default function ErrorPage({ reset }: { error: Error & { digest?: string 
         <button
           type="button"
           onClick={reset}
-          className="min-h-11 rounded-[10px] bg-primary px-4 font-semibold text-white hover:bg-primary-hover"
+          className="min-h-11 rounded-xl bg-primary px-4 font-semibold text-white hover:bg-primary-hover"
         >
           Try again · আবার চেষ্টা করুন
         </button>

@@ -10,7 +10,7 @@ export function ConfirmSubmit({ message, children }: { message: string; children
       onClick={(e) => {
         if (!window.confirm(message)) e.preventDefault();
       }}
-      className="min-h-11 rounded-[10px] px-3 text-sm font-semibold text-danger-ink hover:bg-danger-bg"
+      className="min-h-11 rounded-xl px-3 text-sm font-semibold text-danger-ink hover:bg-danger-bg"
     >
       {children}
     </button>

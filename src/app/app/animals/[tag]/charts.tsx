@@ -123,7 +123,7 @@ export function MilkChart({
         {h && hover !== null ? (
           <div
             role="status"
-            className="pointer-events-none absolute top-2 z-10 min-w-36 rounded-[6px] bg-ink px-3 py-2 text-sm text-surface shadow-lg"
+            className="pointer-events-none absolute top-2 z-10 min-w-36 rounded-xl bg-ink px-3 py-2 text-sm text-surface shadow-lg"
             style={{
               left: `${((PAD.left + hover * slot + slot / 2) / W) * 100}%`,
               transform: `translateX(${hover > data.length * 0.7 ? "-105%" : "8px"})`,
@@ -136,14 +136,14 @@ export function MilkChart({
             <p className="font-mono text-[13px]">
               {labels.total} {n(h.am + h.pm)} {labels.unit}
             </p>
-            {h.withheld ? <p className="mt-1 text-[13px] font-semibold text-accent">{labels.withheld}</p> : null}
+            {h.withheld ? <p className="mt-1 text-[13px] font-semibold text-danger-bg">{labels.withheld}</p> : null}
           </div>
         ) : null}
       </div>
       </div>
       <details className="mt-3 text-sm">
         <summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold text-primary">{labels.tableToggle}</summary>
-        <div className="mt-2 max-h-72 overflow-auto rounded-[6px] border border-line">
+        <div className="mt-2 max-h-72 overflow-auto rounded-xl border border-line">
           <table className="w-full text-left tabular">
             <thead className="sticky top-0 bg-surface">
               <tr className="text-muted">
@@ -272,7 +272,7 @@ export function WeightChart({
         {h && hover !== null ? (
           <div
             role="status"
-            className="pointer-events-none absolute z-10 rounded-[6px] bg-ink px-3 py-2 text-sm text-surface shadow-lg"
+            className="pointer-events-none absolute z-10 rounded-xl bg-ink px-3 py-2 text-sm text-surface shadow-lg"
             style={{
               left: `${(x(h.date) / W) * 100}%`,
               top: `${(y(h.kg) / H) * 100}%`,
@@ -289,7 +289,7 @@ export function WeightChart({
       </div>
       <details className="mt-3 text-sm">
         <summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold text-primary">{labels.tableToggle}</summary>
-        <div className="mt-2 max-h-72 overflow-auto rounded-[6px] border border-line">
+        <div className="mt-2 max-h-72 overflow-auto rounded-xl border border-line">
           <table className="w-full text-left tabular">
             <thead className="sticky top-0 bg-surface">
               <tr className="text-muted">

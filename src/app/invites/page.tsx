@@ -24,7 +24,7 @@ export default async function InvitesPage() {
         <span className="font-display font-extrabold">{t.common.appName}</span>
       </span>
       <main className="flex flex-col gap-4 py-10">
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t.invites.title}</h1>
+        <h1 className="text-[length:var(--text-title)] leading-tight font-extrabold">{t.invites.title}</h1>
         <p className="text-ink-2">{t.invites.subtitle}</p>
         <ul className="mt-2 flex flex-col gap-3">
           {pending.map((inv) => (

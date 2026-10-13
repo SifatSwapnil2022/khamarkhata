@@ -39,6 +39,7 @@ export const bn: Dictionary = {
     building: "খামার খাতা ধাপে ধাপে তৈরি হচ্ছে। লগইন, খামার আর টিমের ভূমিকা চালু আছে; পশুর রেকর্ড আসছে পরের ধাপে।",
   },
   login: {
+    photoBy: "ছবি:",
     title: "মোবাইল নম্বর দিয়ে লগইন",
     subtitle: "এসএমএসে ৬ সংখ্যার কোড যাবে। নতুন হলে এই ধাপেই অ্যাকাউন্ট তৈরি হবে।",
     phoneLabel: "মোবাইল নম্বর",
@@ -94,6 +95,11 @@ export const bn: Dictionary = {
     createOwn: "নিজের খামার তৈরি করুন",
   },
   nav: {
+    more: "আরও",
+    groupHerd: "পশুপাল",
+    groupBusiness: "ব্যবসা",
+    groupFarm: "খামার",
+    market: "বাজার",
     overview: "সারসংক্ষেপ",
     animals: "পশু",
     dairy: "দুধ",

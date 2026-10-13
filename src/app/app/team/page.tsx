@@ -58,7 +58,7 @@ export default async function TeamPage() {
                           </option>
                         ))}
                       </Select>
-                      <button type="submit" className="min-h-11 rounded-[10px] px-3 text-sm font-semibold text-primary hover:bg-surface-2">
+                      <button type="submit" className="min-h-11 rounded-xl px-3 text-sm font-semibold text-primary hover:bg-surface-2">
                         {t.common.save}
                       </button>
                     </form>
@@ -106,7 +106,7 @@ export default async function TeamPage() {
                   {canAssign(ctx.role, inv.role) ? (
                     <form action={revokeInviteAction}>
                       <input type="hidden" name="inviteId" value={inv.id} />
-                      <button type="submit" className="min-h-11 rounded-[10px] px-3 text-sm font-semibold text-danger-ink hover:bg-danger-bg">
+                      <button type="submit" className="min-h-11 rounded-xl px-3 text-sm font-semibold text-danger-ink hover:bg-danger-bg">
                         {t.team.revoke}
                       </button>
                     </form>

@@ -1,76 +1,66 @@
 import Link from "next/link";
 import { signOutAction } from "@/app/actions/auth";
-import { switchFarmAction } from "@/app/actions/farm";
 import { LangToggle } from "@/components/LangToggle";
 import { Logo } from "@/components/ui";
 import { getDictionary } from "@/i18n";
-import { can } from "@/lib/rbac";
+import { formatBdPhone } from "@/lib/phone";
 import { requireFarm } from "@/server/auth";
-import { TabBar, TopNav, type NavItem } from "./NavLinks";
+import { FarmSwitcher } from "./FarmSwitcher";
+import { navGroups, tabItems } from "./nav";
+import { SideNav, TabBar } from "./NavLinks";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const [{ locale, t }, ctx] = await Promise.all([getDictionary(), requireFarm()]);
-
-  const items: NavItem[] = [
-    { href: "/app", label: t.nav.overview },
-    { href: "/app/animals", label: t.nav.animals },
-  ];
-  if (can(ctx.role, "team.view")) items.push({ href: "/app/team", label: t.nav.team });
-  items.push({ href: "/app/settings", label: t.nav.settings });
+  const groups = navGroups(ctx.role, t);
+  const farms = ctx.farms.map(({ farm }) => ({ id: farm.id, name: farm.name }));
 
   return (
-    <div className="min-h-dvh pb-[var(--tabbar)]">
-      <header className="bg-deep text-[#f1ead9]">
-        <div className="page-column flex flex-wrap items-center justify-between gap-x-6 gap-y-3 pt-5 md:pt-6">
-          <Link href="/app" className="flex min-w-0 items-center gap-3 text-[#f1ead9] no-underline">
-            <Logo size={40} />
+    <div className="min-h-dvh pb-[var(--tabbar)] lg:pl-[17rem]">
+      {/* Desktop sidebar */}
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[17rem] flex-col border-r border-line bg-surface lg:flex">
+        <Link href="/app" className="flex items-center gap-3 px-6 pt-6 pb-5 text-ink no-underline">
+          <Logo size={40} />
+          <span className="font-display text-[19px] font-extrabold tracking-[-0.02em]">{t.common.appName}</span>
+        </Link>
+        <div className="px-4 pb-4">
+          <FarmSwitcher farms={farms} current={ctx.farm.id} label={t.nav.switchFarm} district={ctx.farm.district} />
+        </div>
+        <div className="flex-1 overflow-y-auto px-3 pb-6">
+          <SideNav groups={groups} label={t.nav.farm} />
+        </div>
+        <div className="px-4 pb-3">
+          <LangToggle locale={locale} path="/app" label={t.common.switchTo} />
+        </div>
+        <div className="flex items-center justify-between gap-2 border-t border-line px-5 py-4">
+          <div className="min-w-0 text-sm leading-tight">
+            <p className="truncate font-semibold">{ctx.user.name ?? formatBdPhone(ctx.user.phone)}</p>
+            <p className="text-muted">{t.roles[ctx.role]}</p>
+          </div>
+          <form action={signOutAction}>
+            <button type="submit" className="min-h-11 rounded-xl px-3 text-sm font-semibold text-muted hover:bg-surface-2 hover:text-ink">
+              {t.common.signOut}
+            </button>
+          </form>
+        </div>
+      </aside>
+
+      {/* Phone top bar */}
+      <header className="sticky top-0 z-20 border-b border-line bg-surface/90 backdrop-blur lg:hidden">
+        <div className="page-column flex h-16 items-center justify-between gap-3">
+          <Link href="/app" className="flex min-w-0 items-center gap-2.5 text-ink no-underline lg:hidden">
+            <Logo size={34} />
             <span className="flex min-w-0 flex-col leading-tight">
-              <span className="font-display text-xl font-extrabold tracking-[-0.01em]">{t.common.appName}</span>
-              <span className="truncate text-[13px] text-deep-ink">{ctx.farm.name}</span>
+              <span className="font-display text-[17px] font-extrabold tracking-[-0.02em]">{t.common.appName}</span>
+              <span className="truncate text-[13px] text-muted">{ctx.farm.name}</span>
             </span>
           </Link>
-
-          <TopNav items={items} label={t.nav.farm} />
-
-          <div className="flex items-center gap-2">
-            {ctx.farms.length > 1 ? (
-              <form action={switchFarmAction} className="hidden items-center gap-1 lg:flex">
-                <label htmlFor="farmId" className="sr-only">
-                  {t.nav.switchFarm}
-                </label>
-                <select
-                  id="farmId"
-                  name="farmId"
-                  defaultValue={ctx.farm.id}
-                  className="min-h-11 max-w-48 rounded-full border border-white/30 bg-transparent px-3 text-sm text-[#f1ead9]"
-                >
-                  {ctx.farms.map(({ farm }) => (
-                    <option key={farm.id} value={farm.id} className="text-ink">
-                      {farm.name}
-                    </option>
-                  ))}
-                </select>
-                <button type="submit" className="min-h-11 rounded-full px-3 text-sm font-semibold text-accent">
-                  {t.nav.switchFarm}
-                </button>
-              </form>
-            ) : null}
-            <LangToggle locale={locale} path="/app" label={t.common.switchTo} tone="dark" />
-            <form action={signOutAction}>
-              <button
-                type="submit"
-                className="min-h-11 rounded-full border border-white/30 px-4 text-sm font-semibold text-[#f1ead9] hover:border-white/60"
-              >
-                {t.common.signOut}
-              </button>
-            </form>
-          </div>
+          <LangToggle locale={locale} path="/app" label={t.common.switchTo} />
         </div>
       </header>
 
-      {children}
+      <main id="main">{children}</main>
 
-      <TabBar items={items} label={t.nav.farm} />
+      <TabBar items={tabItems(ctx.role, t)} label={t.nav.farm} />
     </div>
   );
 }

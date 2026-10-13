@@ -19,7 +19,7 @@ export default async function OnboardingPage() {
         <LangToggle locale={locale} path="/onboarding" label={t.common.switchTo} />
       </div>
       <main className="py-10">
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t.onboarding.title}</h1>
+        <h1 className="text-[length:var(--text-title)] leading-tight font-extrabold">{t.onboarding.title}</h1>
         <p className="mt-2 text-ink-2">{t.onboarding.subtitle}</p>
         <OnboardingForm t={t.onboarding} locale={locale} defaultName={user.name ?? ""} />
       </main>

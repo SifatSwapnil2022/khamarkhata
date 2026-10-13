@@ -65,7 +65,7 @@ export function FarmFields({
           {SEGMENTS.map((s) => (
             <label
               key={s}
-              className="flex min-h-12 cursor-pointer items-center gap-3 rounded-[10px] border border-line-strong bg-surface px-3.5 py-2.5 has-[:checked]:border-primary has-[:checked]:bg-primary-soft"
+              className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-line-strong bg-surface px-3.5 py-2.5 has-[:checked]:border-primary has-[:checked]:bg-primary-soft"
             >
               <input
                 type="checkbox"

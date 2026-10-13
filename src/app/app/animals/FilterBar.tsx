@@ -51,7 +51,7 @@ export function FilterBar({
       onChange={(e) => {
         if ((e.target as HTMLElement).tagName === "SELECT") apply(e.currentTarget);
       }}
-      className="flex flex-wrap items-end gap-3"
+      className="flex flex-wrap items-end gap-3 rounded-2xl border border-line bg-surface p-4 shadow-[var(--shadow-card)]"
       aria-busy={pending}
     >
       {params.get("group") ? <input type="hidden" name="group" value={params.get("group")!} /> : null}
@@ -65,14 +65,14 @@ export function FilterBar({
           type="search"
           defaultValue={params.get("q") ?? ""}
           placeholder={t.search}
-          className="min-h-11 w-full rounded-full border border-line-strong bg-surface px-4 text-[15px] placeholder:text-muted/70"
+          className="min-h-11 w-full rounded-xl border border-line-strong bg-surface px-3.5 text-[16px] placeholder:text-muted/70 focus:border-primary"
         />
       </div>
       <div className="flex flex-[1_1_150px] flex-col gap-1">
         <label htmlFor="status" className="text-sm font-semibold">
           {t.status}
         </label>
-        <Select id="status" name="status" defaultValue={params.get("status") ?? ""} className="rounded-full">
+        <Select id="status" name="status" defaultValue={params.get("status") ?? ""}>
           <option value="">{t.anyStatus}</option>
           {(Object.keys(t.statuses) as (keyof AnimalsDict["statuses"])[]).map((s) => (
             <option key={s} value={s}>
@@ -85,7 +85,7 @@ export function FilterBar({
         <label htmlFor="breed" className="text-sm font-semibold">
           {t.breed}
         </label>
-        <Select id="breed" name="breed" defaultValue={params.get("breed") ?? ""} className="rounded-full">
+        <Select id="breed" name="breed" defaultValue={params.get("breed") ?? ""}>
           <option value="">{t.anyBreed}</option>
           {breeds.map((b) => (
             <option key={b} value={b}>
@@ -98,7 +98,7 @@ export function FilterBar({
         <label htmlFor="sort" className="text-sm font-semibold">
           {t.sort}
         </label>
-        <Select id="sort" name="sort" defaultValue={params.get("sort") ?? "tag"} className="rounded-full">
+        <Select id="sort" name="sort" defaultValue={params.get("sort") ?? "tag"}>
           <option value="tag">{t.sorts.tag}</option>
           {showMilkSort ? <option value="milk">{t.sorts.milk}</option> : null}
           {showWeightSort ? <option value="weight">{t.sorts.weight}</option> : null}
@@ -108,7 +108,7 @@ export function FilterBar({
       <div className="flex gap-2">
         <button
           type="submit"
-          className="min-h-11 rounded-full bg-ink px-5 text-[15px] font-semibold text-surface hover:opacity-90"
+          className="min-h-11 rounded-xl bg-primary px-5 text-[15px] font-semibold text-white hover:bg-primary-hover"
         >
           {t.apply}
         </button>
@@ -121,7 +121,7 @@ export function FilterBar({
               if (params.get("view")) next.set("view", params.get("view")!);
               start(() => router.push(`${pathname}?${next.toString()}`));
             }}
-            className="min-h-11 rounded-full px-3 text-[15px] font-semibold text-ink-2 underline-offset-4 hover:underline"
+            className="min-h-11 rounded-xl px-3 text-[15px] font-semibold text-ink-2 underline-offset-4 hover:underline"
           >
             {t.clear}
           </button>

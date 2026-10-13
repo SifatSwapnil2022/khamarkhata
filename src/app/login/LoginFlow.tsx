@@ -33,7 +33,7 @@ export function LoginFlow({ t, next }: { t: T; next: string }) {
   return (
     <form action={requestCode} className="flex flex-col gap-5">
       <div>
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t.title}</h1>
+        <h1 className="text-[length:var(--text-title)] leading-tight font-extrabold">{t.title}</h1>
         <p className="mt-2 text-ink-2">{t.subtitle}</p>
       </div>
       <Field label={t.phoneLabel} hint={t.phoneHint} error={error ? t.errors[error as keyof T["errors"]] : undefined} htmlFor="phone">
@@ -87,7 +87,7 @@ function CodeStep({
   return (
     <div className="flex flex-col gap-5">
       <div>
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t.codeLabel}</h1>
+        <h1 className="text-[length:var(--text-title)] leading-tight font-extrabold">{t.codeLabel}</h1>
         <p className="mt-2 text-ink-2">
           {t.codeSentTo} <strong className="whitespace-nowrap text-ink">{state.masked}</strong>
         </p>

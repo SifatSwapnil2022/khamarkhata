@@ -25,7 +25,7 @@ export default async function HomePage() {
           <LangToggle locale={locale} path="/" label={t.common.switchTo} />
           <Link
             href={current ? "/app" : "/login"}
-            className="inline-flex min-h-11 items-center rounded-[10px] bg-primary px-4 font-semibold text-white no-underline hover:bg-primary-hover"
+            className="inline-flex min-h-11 items-center rounded-xl bg-primary px-4 font-semibold text-white no-underline hover:bg-primary-hover"
           >
             {current ? t.common.openFarm : t.common.signIn}
           </Link>
@@ -42,14 +42,14 @@ export default async function HomePage() {
           <div>
             <Link
               href="/login"
-              className="inline-flex min-h-12 items-center rounded-[12px] bg-primary px-6 text-base font-semibold text-white no-underline hover:bg-primary-hover"
+              className="inline-flex min-h-12 items-center rounded-xl bg-primary px-6 text-base font-semibold text-white no-underline hover:bg-primary-hover"
             >
               {t.home.cta}
             </Link>
           </div>
         </section>
 
-        <section aria-label={t.home.eyebrow} className="ledger self-center rounded-[18px] bg-deep p-6 text-white md:p-8">
+        <section aria-label={t.home.eyebrow} className="ledger self-center rounded-3xl bg-deep p-6 text-white md:p-8">
           <ol className="flex flex-col">
             {t.home.segments.map((s, i) => (
               <li key={s.title} className="grid grid-cols-[2.5rem_1fr] gap-x-3 border-b border-white/15 py-5 last:border-0">

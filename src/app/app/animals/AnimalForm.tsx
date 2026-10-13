@@ -69,7 +69,7 @@ export function AnimalForm({
             <legend className="text-sm font-semibold">{f.sex}</legend>
             <div className="flex gap-2">
               {(["female", "male"] as const).map((s) => (
-                <label key={s} className="flex min-h-11 flex-1 cursor-pointer items-center justify-center gap-2 rounded-full border border-line-strong bg-surface px-3 has-[:checked]:border-ink has-[:checked]:bg-ink has-[:checked]:text-surface">
+                <label key={s} className="flex min-h-11 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border border-line-strong bg-surface px-3 font-medium has-[:checked]:border-primary has-[:checked]:bg-primary-soft has-[:checked]:text-primary-ink has-[:checked]:font-semibold">
                   <input type="radio" name="sex" value={s} defaultChecked={(v.sex ?? "female") === s} className="sr-only" />
                   {t.sex[s]}
                 </label>
@@ -134,7 +134,7 @@ export function AnimalForm({
           <legend className="text-sm font-semibold">{f.origin}</legend>
           <div className="flex max-w-md gap-2">
             {(["born", "purchased"] as const).map((o) => (
-              <label key={o} className="flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-full border border-line-strong bg-surface px-3 text-center has-[:checked]:border-ink has-[:checked]:bg-ink has-[:checked]:text-surface">
+              <label key={o} className="flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-xl border border-line-strong bg-surface px-3 text-center font-medium has-[:checked]:border-primary has-[:checked]:bg-primary-soft has-[:checked]:text-primary-ink has-[:checked]:font-semibold">
                 <input type="radio" name="origin" value={o} checked={origin === o} onChange={() => setOrigin(o)} className="sr-only" />
                 {t.profile.origin[o]}
               </label>

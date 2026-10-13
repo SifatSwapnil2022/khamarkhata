@@ -70,65 +70,26 @@ export default async function AnimalPage({ params }: Params) {
 
   return (
     <>
-      {/* ───── Hero band ───── */}
-      <div className="bg-deep text-[#f1ead9]">
-        <div className="page-column grid gap-8 pt-6 pb-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-end md:pt-8">
-          <div className="min-w-0">
-            <Link href="/app/animals" className="inline-flex min-h-11 items-center text-sm font-semibold text-deep-ink no-underline hover:text-[#f1ead9]">
-              ← {p.back}
-            </Link>
-            <div className="mt-4 flex items-center gap-3">
-              <EarTag tag={animal.tag} className="text-[15px]" />
-              <span className="text-sm text-deep-ink">{kind}</span>
-            </div>
-            <h1 className="mt-3 font-display text-[length:var(--text-hero)] leading-[0.95] font-extrabold tracking-[-0.03em] text-balance">
-              {name}
-            </h1>
-            {altName ? (
-              <p className="mt-2 font-display text-2xl text-deep-ink" lang={locale === "bn" ? "en" : "bn"}>
-                {altName}
-              </p>
-            ) : null}
-            <p className="mt-4 text-deep-ink">
-              {[breed, animal.color, fmt.age(animal.birthDate, today, a.ageFmt), animal.shed].filter(Boolean).join(" · ")}
-            </p>
-            {chips.length ? (
-              <div className="mt-5 flex flex-wrap gap-2">
-                {chips.map((c) => (
-                  <Badge key={c.label} tone={c.tone} className="px-3 py-1 text-sm">
-                    {c.label}
-                  </Badge>
-                ))}
-              </div>
-            ) : null}
-            {canWrite ? (
-              <div className="mt-6 flex flex-wrap gap-2">
-                <Link href={`/app/animals/${encodeURIComponent(animal.tag)}/edit`} className={buttonClass("accent")}>
-                  {p.edit}
-                </Link>
-                <Link
-                  href={`/app/animals/${encodeURIComponent(animal.tag)}/exit`}
-                  className="inline-flex min-h-11 items-center rounded-full border border-white/30 px-5 text-[15px] font-semibold text-[#f1ead9] no-underline hover:border-white/60"
-                >
-                  {p.exit}
-                </Link>
-              </div>
-            ) : null}
-          </div>
-          <figure className="min-w-0">
+      {/* ───── Hero: big photo, name and status ───── */}
+      <div className="page-column pt-3 lg:pt-8">
+        <Link href="/app/animals" className="inline-flex min-h-11 items-center gap-1.5 text-[15px] font-semibold text-muted no-underline hover:text-primary">
+          ← {p.back}
+        </Link>
+        <div className="mt-2 grid overflow-hidden rounded-3xl border border-line bg-surface shadow-[var(--shadow-card)] md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+          <figure className="relative min-w-0">
             <AnimalPhoto
               url={photo?.url ?? null}
               alt={name}
               noPhotoLabel={a.noPhoto}
-              sizes="(min-width: 768px) 560px, 100vw"
-              className="aspect-[4/3] w-full rounded-[6px]"
+              sizes="(min-width: 1240px) 620px, (min-width: 768px) 55vw, 100vw"
+              className="aspect-[4/3] h-full w-full md:aspect-auto md:min-h-[420px]"
               priority
             />
             {photo?.credit ? (
-              <figcaption className="mt-2 text-[13px] text-deep-ink">
+              <figcaption className="absolute right-3 bottom-3 rounded-full bg-black/50 px-2.5 py-0.5 text-[12px] text-white">
                 {p.photoBy}{" "}
                 {photo.sourceUrl ? (
-                  <a href={photo.sourceUrl} className="text-deep-ink underline underline-offset-2 hover:text-[#f1ead9]" target="_blank" rel="noreferrer">
+                  <a href={photo.sourceUrl} className="text-white underline-offset-2 hover:underline" target="_blank" rel="noreferrer">
                     {photo.credit}
                   </a>
                 ) : (
@@ -137,29 +98,70 @@ export default async function AnimalPage({ params }: Params) {
               </figcaption>
             ) : null}
           </figure>
+          <div className="flex min-w-0 flex-col p-6 sm:p-8">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <EarTag tag={animal.tag} className="text-[15px]" />
+              <span className="text-[15px] font-medium text-muted">{kind}</span>
+            </div>
+            <h1 className="mt-3 text-[length:var(--text-title)] leading-[1.05] font-extrabold text-balance">{name}</h1>
+            {altName ? (
+              <p className="mt-1 text-xl text-muted" lang={locale === "bn" ? "en" : "bn"}>
+                {altName}
+              </p>
+            ) : null}
+            <p className="mt-3 text-[17px] text-ink-2">
+              {[breed, animal.color, fmt.age(animal.birthDate, today, a.ageFmt), animal.shed].filter(Boolean).join(" · ")}
+            </p>
+            {chips.length ? (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {chips.map((c) => (
+                  <Badge key={c.label} tone={c.tone} className="px-3 py-1 text-sm">
+                    {c.label}
+                  </Badge>
+                ))}
+              </div>
+            ) : null}
+            <dl className="mt-6 grid grid-cols-2 gap-3 border-t border-line pt-5 md:mt-auto">
+              {stats.slice(0, 4).map((s) => (
+                <div key={s.label} className="min-w-0">
+                  <dt className="text-sm text-muted">{s.label}</dt>
+                  <dd className={clsx("font-display text-[22px] leading-tight font-extrabold tracking-[-0.02em] tabular", s.tone === "warn" && "text-warn-ink")}>
+                    {s.value}
+                    {s.unit ? <span className="ml-1 font-sans text-sm font-medium tracking-normal text-muted">{s.unit}</span> : null}
+                  </dd>
+                  {s.note ? <dd className="text-[13px] text-muted">{s.note}</dd> : null}
+                </div>
+              ))}
+            </dl>
+            {canWrite ? (
+              <div className="mt-6 flex flex-wrap gap-2">
+                <Link href={`/app/animals/${encodeURIComponent(animal.tag)}/edit`} className={buttonClass("primary")}>
+                  {p.edit}
+                </Link>
+                <Link href={`/app/animals/${encodeURIComponent(animal.tag)}/exit`} className={buttonClass("secondary")}>
+                  {p.exit}
+                </Link>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
 
-      <div className="page-column flex flex-col gap-10 py-8">
-        {/* ───── Key figures ───── */}
-        <dl className="grid grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))] sm:gap-4">
-          {stats.map((s) => (
-            <Card key={s.label} className="rise">
-              <dt className="text-sm text-muted">{s.label}</dt>
-              <dd
-                className={clsx(
-                  "mt-1 leading-tight tabular",
-                  /^[\d০-৯.,৳—\s-]+$/.test(s.value) ? "font-mono text-[26px] font-medium sm:text-[28px]" : "font-display text-[22px] font-bold",
-                  s.tone === "warn" && "text-warn-ink",
-                )}
-              >
-                {s.value}
-                {s.unit ? <span className="ml-1.5 font-sans text-sm text-muted">{s.unit}</span> : null}
-              </dd>
-              {s.note ? <dd className="mt-1 text-sm text-muted">{s.note}</dd> : null}
-            </Card>
-          ))}
-        </dl>
+      <div className="page-column flex flex-col gap-10 pt-8 pb-12">
+        {stats.length > 4 ? (
+          <dl className="grid grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))] sm:gap-4">
+            {stats.slice(4).map((s) => (
+              <Card key={s.label}>
+                <dt className="text-sm text-muted">{s.label}</dt>
+                <dd className={clsx("mt-1 font-display text-[24px] leading-tight font-extrabold tracking-[-0.02em] tabular", s.tone === "warn" && "text-warn-ink")}>
+                  {s.value}
+                  {s.unit ? <span className="ml-1.5 font-sans text-sm font-medium tracking-normal text-muted">{s.unit}</span> : null}
+                </dd>
+                {s.note ? <dd className="mt-1 text-sm text-muted">{s.note}</dd> : null}
+              </Card>
+            ))}
+          </dl>
+        ) : null}
 
         {/* ───── Charts ───── */}
         {profile.milk.length > 0 ? (
@@ -220,7 +222,7 @@ export default async function AnimalPage({ params }: Params) {
                 {animal.govtId ? <Detail label={p.govtId}>{animal.govtId}</Detail> : null}
               </dl>
               {animal.notes ? (
-                <p className="mt-5 border-t border-dashed border-line-strong pt-4 text-[15px] text-ink-2">{animal.notes}</p>
+                <p className="mt-5 border-t border-line pt-4 text-[15px] text-ink-2">{animal.notes}</p>
               ) : null}
             </Card>
           </Section>
@@ -235,8 +237,8 @@ export default async function AnimalPage({ params }: Params) {
               <ul className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
                 {profile.offspring.map((o) => (
                   <li key={o.tag}>
-                    <Link href={`/app/animals/${encodeURIComponent(o.tag)}`} className="flex items-center gap-3 rounded-[6px] bg-surface p-3 text-ink no-underline hover:bg-surface/70">
-                      <AnimalPhoto url={o.photoUrl} alt="" noPhotoLabel="" sizes="56px" className="size-14 shrink-0 rounded-[4px] [&_span]:hidden [&_svg]:h-7 [&_svg]:w-9" />
+                    <Link href={`/app/animals/${encodeURIComponent(o.tag)}`} className="flex items-center gap-3 rounded-2xl border border-line bg-surface p-3 text-ink no-underline shadow-[var(--shadow-card)] hover:border-primary/40">
+                      <AnimalPhoto url={o.photoUrl} alt="" noPhotoLabel="" sizes="56px" className="size-14 shrink-0 rounded-xl [&_span]:hidden [&_svg]:h-7 [&_svg]:w-9" />
                       <span className="min-w-0">
                         <EarTag tag={o.tag} />
                         <span className="mt-1 block truncate text-sm font-semibold">{o.name ?? (o.purpose === "calf" ? a.calfSex[o.sex as "female" | "male"] : a.purpose[o.purpose as keyof AnimalsDict["purpose"]])}</span>
@@ -264,10 +266,10 @@ export default async function AnimalPage({ params }: Params) {
                         aria-hidden="true"
                         className={clsx(
                           "absolute top-1.5 -left-[31px] size-3 rounded-full ring-4 ring-ground",
-                          b.type === "calving" ? "bg-primary" : b.type === "service" ? "bg-accent" : b.type === "pregnancy_check" ? "bg-ink" : "bg-line-strong",
+                          b.type === "calving" ? "bg-primary" : b.type === "service" ? "bg-fresh" : b.type === "pregnancy_check" ? "bg-ink" : "bg-line-strong",
                         )}
                       />
-                      <p className="font-mono text-[13px] text-muted">{fmt.date(b.date)}</p>
+                      <p className="text-[13px] font-medium text-muted tabular">{fmt.date(b.date)}</p>
                       <p className="font-semibold">
                         {p.events[b.type as keyof typeof p.events] ?? b.type}
                         {b.pdResult ? ` · ${p.pd[b.pdResult as keyof typeof p.pd]}` : ""}
@@ -283,7 +285,7 @@ export default async function AnimalPage({ params }: Params) {
           <Section title={p.health}>
             <div className="flex flex-col gap-6">
               {profile.vaccines.length ? (
-                <div className="overflow-x-auto rounded-[6px] bg-surface">
+                <div className="overflow-x-auto rounded-2xl border border-line bg-surface shadow-[var(--shadow-card)]">
                   <table className="w-full min-w-[420px] text-left">
                     <caption className="sr-only">{p.vaccines}</caption>
                     <thead>
@@ -301,9 +303,9 @@ export default async function AnimalPage({ params }: Params) {
                             <td className="px-4 py-3 font-semibold">
                               {locale === "bn" && v.vaccineBn ? v.vaccineBn : v.vaccine}
                             </td>
-                            <td className="px-4 py-3 font-mono text-sm tabular">{fmt.date(v.last)}</td>
+                            <td className="px-4 py-3 text-sm tabular">{fmt.date(v.last)}</td>
                             <td className="px-4 py-3">
-                              <span className="font-mono text-sm tabular">{fmt.date(v.nextDue)}</span>{" "}
+                              <span className="text-sm tabular">{fmt.date(v.nextDue)}</span>{" "}
                               {state !== "ok" ? (
                                 <Badge tone={state === "overdue" ? "danger" : "warn"} className="ml-1">
                                   {state === "overdue" ? p.overdue : p.dueSoon}
@@ -327,10 +329,10 @@ export default async function AnimalPage({ params }: Params) {
                     {profile.health
                       .filter((h) => h.type === "treatment" || h.type === "vet_visit")
                       .map((h, i) => (
-                        <li key={`${h.date}-${i}`} className="rounded-[6px] bg-surface p-4">
+                        <li key={`${h.date}-${i}`} className="rounded-2xl border border-line bg-surface p-4 shadow-[var(--shadow-card)]">
                           <p className="flex flex-wrap items-baseline justify-between gap-2">
                             <span className="font-semibold">{h.diagnosis ?? p.healthTypes[h.type as keyof typeof p.healthTypes]}</span>
-                            <span className="font-mono text-[13px] text-muted">{fmt.date(h.date)}</span>
+                            <span className="text-[13px] font-medium text-muted tabular">{fmt.date(h.date)}</span>
                           </p>
                           {h.drug ? (
                             <p className="mt-1 text-sm text-ink-2">
@@ -366,7 +368,7 @@ export default async function AnimalPage({ params }: Params) {
 function Section({ title, aside, children }: { title: string; aside?: string; children: ReactNode }) {
   return (
     <section className="flex min-w-0 flex-col gap-4">
-      <h2 className="rule-title">
+      <h2 className="section-title">
         <span>{title}</span>
         {aside ? <span className="font-sans text-sm font-normal text-muted">{aside}</span> : null}
       </h2>
@@ -483,7 +485,7 @@ function Pedigree({
     <div className="overflow-x-auto">
       <div className="grid min-w-[620px] grid-cols-[1fr_1fr_1fr] items-center gap-x-6">
         <div className="row-span-4 self-center">
-          <div className="rounded-[6px] bg-ink p-4 text-surface">
+          <div className="rounded-2xl bg-deep p-4 text-white">
             <EarTag tag={self.tag} />
             <p className="mt-2 font-display text-lg font-bold">{self.name}</p>
             {self.breed ? <p className="text-sm opacity-80">{self.breed}</p> : null}
@@ -513,10 +515,10 @@ function Pedigree({
 }
 
 function ParentCard({ role, node, a, small = false }: { role: string; node: ParentRef | null; a: AnimalsDict; small?: boolean }) {
-  const base = clsx("block rounded-[6px] border-l-4 p-3", small ? "text-sm" : "");
+  const base = clsx("block rounded-xl border p-3", small ? "text-sm" : "");
   if (!node) {
     return (
-      <div className={clsx(base, "border-line-strong bg-surface/60")}>
+      <div className={clsx(base, "border-dashed border-line-strong bg-transparent")}>
         <p className="text-[13px] text-muted">{role}</p>
         <p className="text-muted">{a.profile.unknown}</p>
       </div>
@@ -524,17 +526,17 @@ function ParentCard({ role, node, a, small = false }: { role: string; node: Pare
   }
   if (node.kind === "straw") {
     return (
-      <div className={clsx(base, "border-accent bg-surface")}>
+      <div className={clsx(base, "border-line bg-surface")}>
         <p className="text-[13px] text-muted">
           {role} · {a.profile.straw}
         </p>
-        <p className="font-mono font-medium">{node.code}</p>
+        <p className="font-semibold tabular">{node.code}</p>
         <p className="text-[13px] text-ink-2">{[node.breedLabel, node.source].filter(Boolean).join(" · ")}</p>
       </div>
     );
   }
   return (
-    <Link href={`/app/animals/${encodeURIComponent(node.tag)}`} className={clsx(base, "border-primary bg-surface text-ink no-underline hover:bg-surface/70")}>
+    <Link href={`/app/animals/${encodeURIComponent(node.tag)}`} className={clsx(base, "border-line bg-surface text-ink no-underline shadow-[var(--shadow-card)] hover:border-primary/50")}>
       <p className="text-[13px] text-muted">{role}</p>
       <p className="flex flex-wrap items-center gap-2">
         <EarTag tag={node.tag} />
