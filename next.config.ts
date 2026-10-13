@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   // Database drivers load native/WASM pieces and WebSocket internals at runtime; bundling them breaks that.
   serverExternalPackages: ["@electric-sql/pglite", "@netlify/database", "@neondatabase/serverless", "ws", "pg", "postgres"],
   poweredByHeader: false,
+  images: {
+    // Demo photos are resized by Unsplash's own CDN; see the loader.
+    loader: "custom",
+    loaderFile: "./src/lib/image-loader.ts",
+  },
   async headers() {
     return [
       {

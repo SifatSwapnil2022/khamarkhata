@@ -1,53 +1,64 @@
 @import "tailwindcss";
 
 /*
- * Design tokens. Components use the Tailwind names (bg-ground, text-ink, border-line …),
- * which resolve to these variables, so dark mode is one override below.
+ * Khamar Khata design tokens.
+ *
+ * The palette comes from the farm itself: ledger paper on a dusty yard, soot-dark
+ * evenings, leaf green, mustard fields in winter and the clay of the cowshed floor.
+ * Colours are flat blocks, never gradients. Components use the Tailwind names
+ * (bg-ground, text-ink, bg-deep …); dark mode overrides the variables only.
  */
 :root {
-  --ground: #f4f5ef;
-  --surface: #ffffff;
-  --surface-2: #eceee8;
-  --ink: #1b2620;
-  --ink-2: #3c4741;
-  --muted: #56625b;
-  --line: #dde1d7;
-  --line-strong: #cdd3c7;
-  --primary: #1f6b4a;
-  --primary-hover: #164e36;
-  --primary-soft: #e1ede5;
-  --primary-ink: #165c3e;
-  --deep: #1f3d2e;
-  --deep-ink: #c9ddd1;
-  --accent: #b7791f;
-  --warn-bg: #fbefd5;
-  --warn-ink: #6e4600;
-  --danger-bg: #fbe2dd;
-  --danger-ink: #9b2c1c;
-  --focus: #b7791f;
+  --ground: #ece4d3; /* yard dust */
+  --surface: #fffaf0; /* ledger paper */
+  --surface-2: #e2d8c3;
+  --ink: #17140f; /* soot */
+  --ink-2: #3b3429;
+  --muted: #645a4b;
+  --line: #d6c9ae;
+  --line-strong: #b9a987;
+  --primary: #1d6a44; /* leaf */
+  --primary-hover: #155236;
+  --primary-soft: #d5e5d1;
+  --primary-ink: #14502f;
+  --deep: #17140f; /* header band */
+  --deep-2: #2a241c;
+  --deep-ink: #d8cfbd;
+  --accent: #f2a900; /* mustard */
+  --accent-ink: #4a3300;
+  --clay: #a8432a;
+  --warn-bg: #fbe4a4;
+  --warn-ink: #5c3f00;
+  --danger-bg: #f5d3c8;
+  --danger-ink: #962c16;
+  --focus: #17140f;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --ground: #121a15;
-    --surface: #18221c;
-    --surface-2: #213028;
-    --ink: #e7ece8;
-    --ink-2: #c3ccc6;
-    --muted: #9aa69f;
-    --line: #2b3a31;
-    --line-strong: #3a4c41;
-    --primary: #3f9a6f;
-    --primary-hover: #52ad82;
-    --primary-soft: #1f3a2c;
-    --primary-ink: #9fd6b8;
-    --deep: #1c2d23;
-    --deep-ink: #a9c4b4;
-    --accent: #d9a24a;
-    --warn-bg: #3a2e14;
-    --warn-ink: #f0cf8c;
-    --danger-bg: #3d1f1a;
-    --danger-ink: #f2b0a4;
+    --ground: #12100c;
+    --surface: #1d1914;
+    --surface-2: #2a241c;
+    --ink: #f1ead9;
+    --ink-2: #d2c8b3;
+    --muted: #a99d87;
+    --line: #342d23;
+    --line-strong: #4a4033;
+    --primary: #4fae7e;
+    --primary-hover: #66c191;
+    --primary-soft: #1d3626;
+    --primary-ink: #9fdcb9;
+    --deep: #0b0a08;
+    --deep-2: #1f1b15;
+    --deep-ink: #c8bea9;
+    --accent: #f2b51c;
+    --accent-ink: #1a1203;
+    --clay: #e0795c;
+    --warn-bg: #3b2e0e;
+    --warn-ink: #f6d283;
+    --danger-bg: #3d1d14;
+    --danger-ink: #f2ad99;
+    --focus: #f2b51c;
   }
 }
 
@@ -65,43 +76,132 @@
   --color-primary-soft: var(--primary-soft);
   --color-primary-ink: var(--primary-ink);
   --color-deep: var(--deep);
+  --color-deep-2: var(--deep-2);
   --color-deep-ink: var(--deep-ink);
   --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-clay: var(--clay);
   --color-warn-bg: var(--warn-bg);
   --color-warn-ink: var(--warn-ink);
   --color-danger-bg: var(--danger-bg);
   --color-danger-ink: var(--danger-ink);
 
-  --font-display: "Archivo", "Hind Siliguri", system-ui, sans-serif;
-  --font-sans: "Hind Siliguri", system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", "Hind Siliguri", system-ui, sans-serif;
+  --font-sans: "Instrument Sans Variable", "Hind Siliguri", system-ui, sans-serif;
+  --font-mono: "DM Mono", "Hind Siliguri", ui-monospace, monospace;
+
+  --text-hero: clamp(2.5rem, 6.5vw, 5.5rem);
+  --text-title: clamp(2rem, 4.2vw, 3.5rem);
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-html {
-  background: var(--ground);
-  color: var(--ink);
-  -webkit-text-size-adjust: 100%;
+@layer base {
+  :root {
+    /* Height of the phone tab bar, including the home-gesture strip. Zero where the bar is hidden. */
+    --tabbar: calc(3.75rem + env(safe-area-inset-bottom));
+  }
+  @media (min-width: 48rem) {
+    :root {
+      --tabbar: 0px;
+    }
+  }
+
+  html {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* Bangla script sits taller than Latin, so it gets more leading. */
+  html:lang(bn) body {
+    line-height: 1.7;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  .bg-deep :focus-visible {
+    outline-color: var(--accent);
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
 }
 
-body {
-  font-family: var(--font-sans);
-  font-size: 15px;
-  line-height: 1.5;
+@layer components {
+  /* One page measure everywhere: 1240px with a fluid gutter that clears phone cut-outs. */
+  .page-column {
+    width: 100%;
+    max-width: 1240px;
+    margin-inline: auto;
+    padding-left: max(clamp(1.25rem, 4vw, 3rem), env(safe-area-inset-left));
+    padding-right: max(clamp(1.25rem, 4vw, 3rem), env(safe-area-inset-right));
+  }
+
+  /* Section heading with the heavy rule from a ledger column. */
+  .rule-title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--ink);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  /* Ledger rules: a quiet nod to the paper khata the app replaces. */
+  .ledger {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 31px,
+      color-mix(in srgb, var(--deep-ink) 16%, transparent) 31px,
+      color-mix(in srgb, var(--deep-ink) 16%, transparent) 32px
+    );
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* DM Mono has no Bangla digits; in Bangla, figures use the display face instead. Ear tags stay mono. */
+  html:lang(bn) .font-mono:not(.keep-mono) {
+    font-family: var(--font-display);
+  }
+
+  /* Cards rise gently into place on first paint. */
+  .rise {
+    animation: rise 520ms var(--ease-out-quint) both;
+  }
 }
 
-:where(a, button, input, select, textarea, summary):focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-}
-
-/* Ledger rules: a quiet nod to the paper khata the app replaces. */
-.ledger {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent 31px,
-    color-mix(in srgb, var(--deep-ink) 18%, transparent) 31px,
-    color-mix(in srgb, var(--deep-ink) 18%, transparent) 32px
-  );
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

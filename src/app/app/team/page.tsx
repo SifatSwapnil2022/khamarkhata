@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { changeRoleAction, removeMemberAction, revokeInviteAction } from "@/app/actions/farm";
-import { Badge, Card, Select } from "@/components/ui";
+import { Badge, Card, PageHead, Select } from "@/components/ui";
 import { getDb } from "@/db";
 import { getDictionary } from "@/i18n";
 import { formatBdPhone } from "@/lib/phone";
@@ -23,11 +23,9 @@ export default async function TeamPage() {
   const dateFmt = new Intl.DateTimeFormat(locale === "bn" ? "bn-BD" : "en-GB", { dateStyle: "medium" });
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t.team.title}</h1>
-        <p className="mt-1 text-ink-2">{t.team.subtitle}</p>
-      </div>
+    <>
+    <PageHead title={t.team.title} subtitle={t.team.subtitle} />
+    <div className="page-column flex flex-col gap-6 py-8">
 
       <div className="flex flex-wrap gap-6">
         <Card flush className="min-w-0 flex-[3_1_480px] self-start">
@@ -131,5 +129,6 @@ export default async function TeamPage() {
         </dl>
       </Card>
     </div>
+    </>
   );
 }

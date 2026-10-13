@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Card, Notice } from "@/components/ui";
+import { Card, Notice, PageHead } from "@/components/ui";
 import { getDictionary } from "@/i18n";
 import { can } from "@/lib/rbac";
 import { requireFarm } from "@/server/auth";
@@ -12,8 +12,10 @@ export default async function SettingsPage() {
   const editable = can(ctx.role, "farm.update");
 
   return (
+    <>
+    <PageHead title={t.settings.title} subtitle={ctx.farm.name} />
+    <div className="page-column py-8">
     <div className="flex max-w-3xl flex-col gap-6">
-      <h1 className="font-display text-3xl font-bold tracking-tight">{t.settings.title}</h1>
       {editable ? (
         <SettingsForm
           t={t}
@@ -42,5 +44,7 @@ export default async function SettingsPage() {
         </Card>
       )}
     </div>
+    </div>
+    </>
   );
 }

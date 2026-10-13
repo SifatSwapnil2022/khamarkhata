@@ -1,4 +1,7 @@
+import { animalsEn } from "./animals";
+
 export const en = {
+  animals: animalsEn,
   common: {
     appName: "Khamar Khata",
     appNameAlt: "খামার খাতা",

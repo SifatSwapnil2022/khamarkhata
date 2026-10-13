@@ -1,6 +1,8 @@
+import { animalsBn } from "./animals";
 import type { Dictionary } from "./en";
 
 export const bn: Dictionary = {
+  animals: animalsBn,
   common: {
     appName: "খামার খাতা",
     appNameAlt: "Khamar Khata",

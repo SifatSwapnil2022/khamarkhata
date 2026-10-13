@@ -8,17 +8,20 @@ Farm records for Bangladeshi cattle farms. It covers three segments:
 
 The goal is that every animal has its full history on record: mother and father, vaccines, treatments, weigh-ins and sale.
 
-> Status: **Phase 1 of 10.** Live today:
+> Status: **Phase 2 of 10.** Live today:
 > - phone sign-in
 > - farms
 > - team roles and invites
 > - Bangla/English
+> - animal records: herd list with filters, profiles with milk and weight charts, pedigree, breeding and health history, add/edit/record a sale
 >
-> The full data model for later phases is already in place. Animal records are next.
+> The full data model for later phases is already in place. Daily milk entry is next.
 
-| Overview | Team and roles | Bangla, mobile |
+| Animals | Cow profile | Qurbani bull |
 |---|---|---|
-| ![Overview](docs/screenshots/overview.png) | ![Team](docs/screenshots/team.png) | ![Login in Bangla on mobile](docs/screenshots/login-mobile-bn.png) |
+| ![Animals list](docs/screenshots/animals.png) | ![Cow profile with milk chart](docs/screenshots/animal-cow.png) | ![Qurbani bull with weight projection](docs/screenshots/animal-qurbani.png) |
+
+Screenshots were taken offline, so the Unsplash photos show as empty frames; on the live site they load.
 
 ## Run it
 
@@ -104,7 +107,7 @@ CI (`.github/workflows/ci.yml`) runs lint, type-check, tests and a production bu
 ## Roadmap
 
 1. ✅ Setup, auth, farms, roles
-2. Animal records: profiles, photos, pedigree (dam/sire), timeline
+2. ✅ Animal records: list with filters, profiles with milk and weight charts, pedigree (dam/sire), breeding and health timelines, add/edit/sold
 3. Dairy: offline milk entry, lactation, milk sales
 4. Health: vaccines, treatments with withdrawal warnings, reminders
 5. Breeding: calendar, sire catalog, inbreeding check

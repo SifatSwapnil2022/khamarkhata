@@ -1,6 +1,7 @@
-import "@fontsource/archivo/600.css";
-import "@fontsource/archivo/700.css";
-import "@fontsource/archivo/800.css";
+import "@fontsource-variable/bricolage-grotesque/index.css";
+import "@fontsource-variable/instrument-sans/index.css";
+import "@fontsource/dm-mono/latin-400.css";
+import "@fontsource/dm-mono/latin-500.css";
 import "@fontsource/hind-siliguri/400.css";
 import "@fontsource/hind-siliguri/500.css";
 import "@fontsource/hind-siliguri/600.css";
@@ -16,8 +17,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f4f5ef" },
-    { media: "(prefers-color-scheme: dark)", color: "#121a15" },
+    { media: "(prefers-color-scheme: light)", color: "#17140f" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0a08" },
   ],
 };
 

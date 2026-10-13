@@ -1,11 +1,7 @@
 import { sql } from "drizzle-orm";
 import type { DB } from "@/db/client";
+import { rowsOf } from "@/db/rows";
 
-/** Drivers return either an array of rows or `{ rows }`. */
-function rowsOf<T>(result: unknown): T[] {
-  if (Array.isArray(result)) return result as T[];
-  return ((result as { rows?: T[] }).rows ?? []) as T[];
-}
 
 export type HerdSummary = {
   milkCows: number;
