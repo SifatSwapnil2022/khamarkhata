@@ -15,7 +15,8 @@ export const OTP_MAX_PER_IP = 10; // per window
 export const OTP_IP_WINDOW_SEC = 60 * 60;
 
 function secret(): string {
-  const s = process.env.OTP_SECRET;
+  const netlifyEnv = (globalThis as { Netlify?: { env?: { get(key: string): string | undefined } } }).Netlify?.env;
+  const s = netlifyEnv?.get("OTP_SECRET") ?? process.env.OTP_SECRET;
   if (!s || s.length < 32) throw new Error("OTP_SECRET must be set to at least 32 characters.");
   return s;
 }
