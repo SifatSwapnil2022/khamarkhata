@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. Components use the Tailwind names (bg-ground, text-ink, border-line …),
+ * which resolve to these variables, so dark mode is one override below.
+ */
+:root {
+  --ground: #f4f5ef;
+  --surface: #ffffff;
+  --surface-2: #eceee8;
+  --ink: #1b2620;
+  --ink-2: #3c4741;
+  --muted: #56625b;
+  --line: #dde1d7;
+  --line-strong: #cdd3c7;
+  --primary: #1f6b4a;
+  --primary-hover: #164e36;
+  --primary-soft: #e1ede5;
+  --primary-ink: #165c3e;
+  --deep: #1f3d2e;
+  --deep-ink: #c9ddd1;
+  --accent: #b7791f;
+  --warn-bg: #fbefd5;
+  --warn-ink: #6e4600;
+  --danger-bg: #fbe2dd;
+  --danger-ink: #9b2c1c;
+  --focus: #b7791f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #121a15;
+    --surface: #18221c;
+    --surface-2: #213028;
+    --ink: #e7ece8;
+    --ink-2: #c3ccc6;
+    --muted: #9aa69f;
+    --line: #2b3a31;
+    --line-strong: #3a4c41;
+    --primary: #3f9a6f;
+    --primary-hover: #52ad82;
+    --primary-soft: #1f3a2c;
+    --primary-ink: #9fd6b8;
+    --deep: #1c2d23;
+    --deep-ink: #a9c4b4;
+    --accent: #d9a24a;
+    --warn-bg: #3a2e14;
+    --warn-ink: #f0cf8c;
+    --danger-bg: #3d1f1a;
+    --danger-ink: #f2b0a4;
+  }
+}
+
+@theme inline {
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-ink: var(--primary-ink);
+  --color-deep: var(--deep);
+  --color-deep-ink: var(--deep-ink);
+  --color-accent: var(--accent);
+  --color-warn-bg: var(--warn-bg);
+  --color-warn-ink: var(--warn-ink);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-ink: var(--danger-ink);
+
+  --font-display: "Archivo", "Hind Siliguri", system-ui, sans-serif;
+  --font-sans: "Hind Siliguri", system-ui, sans-serif;
+}
+
+html {
+  background: var(--ground);
+  color: var(--ink);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Ledger rules: a quiet nod to the paper khata the app replaces. */
+.ledger {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 31px,
+    color-mix(in srgb, var(--deep-ink) 18%, transparent) 31px,
+    color-mix(in srgb, var(--deep-ink) 18%, transparent) 32px
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
