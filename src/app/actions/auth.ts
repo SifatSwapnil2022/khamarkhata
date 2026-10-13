@@ -16,7 +16,9 @@ export type RequestCodeState =
   | { step: "phone"; error?: string; retryAfterSec?: number; phone?: string }
   | { step: "code"; phone: string; masked: string; retryAfterSec: number; debugCode?: string; error?: string };
 
-const showDebugCode = () => process.env.NODE_ENV !== "production" && process.env.OTP_DEBUG === "true";
+/** DEMO_MODE=true (public demo deployments) shows the code on screen so visitors can sign in without SMS. */
+const showDebugCode = () =>
+  process.env.DEMO_MODE === "true" || (process.env.NODE_ENV !== "production" && process.env.OTP_DEBUG === "true");
 
 export async function requestCodeAction(_prev: RequestCodeState, form: FormData): Promise<RequestCodeState> {
   const phone = String(form.get("phone") ?? "");

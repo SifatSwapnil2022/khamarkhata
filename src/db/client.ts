@@ -1,19 +1,25 @@
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
-import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
-import * as schema from "./schema";
+import type { PgAsyncDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 
-export type DB = PgDatabase<PgQueryResultHKT, typeof schema>;
+export type DB = PgAsyncDatabase<PgQueryResultHKT>;
 
-const MIGRATIONS = path.join(process.cwd(), "drizzle");
+/** Same folder Netlify applies on deploy, so local, test and production share one migration history. */
+const MIGRATIONS = path.join(process.cwd(), "netlify", "database", "migrations");
 
 /**
- * DATABASE_URL:
- * - unset or "pglite": embedded Postgres stored in ./.data/pglite (local dev)
+ * Which database to use:
  * - "memory": throwaway in-memory Postgres (tests)
- * - postgres://…: a real server
+ * - on Netlify (NETLIFY_DB_URL is set): Netlify Database; migrations are applied by the deploy
+ * - unset or "pglite": embedded Postgres in ./.data/pglite (local dev)
+ * - postgres://…: any other Postgres server
  */
 export async function createDb(url: string | undefined, opts: { migrate?: boolean } = {}): Promise<DB> {
+  if (url !== "memory" && process.env.NETLIFY_DB_URL) {
+    const { drizzle } = await import("drizzle-orm/netlify-db");
+    return drizzle({ casing: "snake_case" }) as unknown as DB;
+  }
+
   if (!url || url === "pglite" || url === "memory") {
     const { PGlite } = await import("@electric-sql/pglite");
     const { drizzle } = await import("drizzle-orm/pglite");
@@ -25,19 +31,18 @@ export async function createDb(url: string | undefined, opts: { migrate?: boolea
       await mkdir(path.dirname(dir), { recursive: true });
       client = new PGlite(dir);
     }
-    const db = drizzle({ client, schema, casing: "snake_case" });
+    const db = drizzle({ client, casing: "snake_case" });
     if (opts.migrate) {
       const { migrate } = await import("drizzle-orm/pglite/migrator");
       await migrate(db, { migrationsFolder: MIGRATIONS });
     }
-    // Both drivers share the pg-core query builder; only the result type differs.
+    // Every driver shares the pg-core query builder; only the result type differs.
     return db as unknown as DB;
   }
 
   const { default: postgres } = await import("postgres");
   const { drizzle } = await import("drizzle-orm/postgres-js");
-  const client = postgres(url, { max: 10 });
-  const db = drizzle({ client, schema, casing: "snake_case" });
+  const db = drizzle({ client: postgres(url, { max: 10 }), casing: "snake_case" });
   if (opts.migrate) {
     const { migrate } = await import("drizzle-orm/postgres-js/migrator");
     await migrate(db, { migrationsFolder: MIGRATIONS });

@@ -10,7 +10,7 @@
  * - Records are events (milk, breeding, health, weigh-in) so an animal's profile is one timeline.
  * - client_id columns let the offline PWA retry a write without creating duplicates.
  */
-import { relations, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import {
   boolean,
   date,
@@ -581,27 +581,6 @@ export const notifications = pgTable(
   },
   (t) => [index().on(t.userId, t.readAt)],
 );
-
-/* ───────────────────────── Relations ───────────────────────── */
-
-export const usersRelations = relations(users, ({ many }) => ({
-  memberships: many(memberships),
-}));
-
-export const farmsRelations = relations(farms, ({ many }) => ({
-  memberships: many(memberships),
-  invites: many(invites),
-}));
-
-export const membershipsRelations = relations(memberships, ({ one }) => ({
-  farm: one(farms, { fields: [memberships.farmId], references: [farms.id] }),
-  user: one(users, { fields: [memberships.userId], references: [users.id] }),
-}));
-
-export const invitesRelations = relations(invites, ({ one }) => ({
-  farm: one(farms, { fields: [invites.farmId], references: [farms.id] }),
-  invitedBy: one(users, { fields: [invites.invitedById], references: [users.id] }),
-}));
 
 export type Role = (typeof roleEnum.enumValues)[number];
 export type Segment = (typeof segmentEnum.enumValues)[number];

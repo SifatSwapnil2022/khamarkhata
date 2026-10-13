@@ -8,6 +8,7 @@
 | Styling | Tailwind CSS v4 with tokens as CSS variables | One token set drives light and dark mode; no component-library theme to fight. |
 | Database | PostgreSQL via Drizzle ORM | Pedigree (dam/sire links) and event history are relational. Drizzle has no engine binary, generates plain SQL migrations, and the same schema runs on Postgres and PGlite. |
 | Local DB | PGlite (Postgres compiled to WASM) | `npm run dev` works with zero setup; tests get a fresh in-memory Postgres per test. Real Postgres via `docker compose up -d`. |
+| Hosting | Netlify + Netlify Database | Migrations in `netlify/database/migrations/` are applied by each deploy; deploy previews get their own database branch. |
 | Validation | zod | Every server input is parsed before it touches the database. |
 | Auth | Phone OTP + database sessions | Most farmers don't use email. See *Auth* below. |
 | Tests | Vitest | Business rules are tested against a real Postgres (PGlite), not mocks. |
@@ -29,7 +30,7 @@ src/
   lib/                  pure helpers: phone, rbac, bd (districts, taka), result
   server/               services with the business rules; take a DB handle, no Next imports
     auth.ts             Next glue: current user, farm context, permission guard
-drizzle/                generated SQL migrations
+netlify/database/migrations/  generated SQL migrations (applied by Netlify on deploy)
 scripts/                migrate, seed, reset
 tests/                  Vitest suites
 ```

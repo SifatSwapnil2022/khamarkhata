@@ -53,6 +53,7 @@ export const en = {
     seconds: "s",
     changeNumber: "Use a different number",
     devCode: "Development mode — your code is",
+    demoBanner: "Demo site: no SMS is sent. Your code appears on screen after you enter a number. Data may be reset.",
     errors: {
       invalid_phone: "That doesn't look like a Bangladeshi mobile number.",
       rate_limited: "Too many codes requested. Wait a moment and try again.",

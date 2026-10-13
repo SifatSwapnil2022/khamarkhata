@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { LangToggle } from "@/components/LangToggle";
-import { Logo } from "@/components/ui";
+import { Logo, Notice } from "@/components/ui";
 import { getDictionary } from "@/i18n";
 import { getCurrentUser, safeNext } from "@/server/auth";
 import { LoginFlow } from "./LoginFlow";
@@ -39,6 +39,11 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           <LangToggle locale={locale} path="/login" label={t.common.switchTo} />
         </div>
         <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-10">
+          {process.env.DEMO_MODE === "true" ? (
+            <div className="mb-6">
+              <Notice tone="warn">{t.login.demoBanner}</Notice>
+            </div>
+          ) : null}
           <LoginFlow t={t.login} next={next} />
         </div>
       </main>
