@@ -12,6 +12,10 @@ const globalForDb = globalThis as unknown as { __khamarDb?: Promise<DB> };
 export function getDb(): Promise<DB> {
   globalForDb.__khamarDb ??= createDb(process.env.DATABASE_URL, {
     migrate: isEmbedded(process.env.DATABASE_URL),
+  }).catch((error: unknown) => {
+    // Don't cache a failed connection; the next request tries again.
+    globalForDb.__khamarDb = undefined;
+    throw error;
   });
   return globalForDb.__khamarDb;
 }
