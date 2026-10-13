@@ -1,4 +1,5 @@
 import { animalsEn } from "./animals";
+import { qurbaniEn } from "./qurbani";
 import { breedingEn } from "./breeding";
 import { healthEn } from "./health";
 import { dairyEn } from "./dairy";
@@ -8,6 +9,7 @@ export const en = {
   dairy: dairyEn,
   health: healthEn,
   breeding: breedingEn,
+  qurbani: qurbaniEn,
   common: {
     appName: "Khamar Khata",
     appNameAlt: "খামার খাতা",

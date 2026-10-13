@@ -72,6 +72,8 @@ export async function createDb(
   if (opts.migrate) {
     const { migrate } = await import("drizzle-orm/pglite/migrator");
     await migrate(db, { migrationsFolder: MIGRATIONS });
+    // Embedded Postgres has no autovacuum, so collect planner statistics after loading data.
+    await client.exec("analyze");
   }
   // Every driver shares the pg-core query builder; only the result type differs.
   return db as unknown as DB;

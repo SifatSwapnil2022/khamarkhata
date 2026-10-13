@@ -1,4 +1,5 @@
 import { animalsBn } from "./animals";
+import { qurbaniBn } from "./qurbani";
 import { breedingBn } from "./breeding";
 import { healthBn } from "./health";
 import { dairyBn } from "./dairy";
@@ -9,6 +10,7 @@ export const bn: Dictionary = {
   dairy: dairyBn,
   health: healthBn,
   breeding: breedingBn,
+  qurbani: qurbaniBn,
   common: {
     appName: "খামার খাতা",
     appNameAlt: "Khamar Khata",
