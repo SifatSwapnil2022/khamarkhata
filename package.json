@@ -13,8 +13,8 @@
     "test:watch": "vitest",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "node --env-file-if-exists=.env --import tsx scripts/migrate.ts",
-    "db:seed": "node --env-file-if-exists=.env --import tsx scripts/seed.ts",
-    "db:reset": "node --env-file-if-exists=.env --import tsx scripts/reset.ts"
+    "db:reset": "node --env-file-if-exists=.env --import tsx scripts/reset.ts",
+    "db:demo": "node --import tsx scripts/demo/generate-demo-farm.ts"
   },
   "engines": {
     "node": ">=22.9"

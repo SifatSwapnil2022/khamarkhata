@@ -315,6 +315,9 @@ export const animalMedia = pgTable("animal_media", {
   url: text().notNull(),
   kind: text().notNull().default("photo"),
   isCover: boolean().notNull().default(false),
+  /** Photographer credit and source page, for photos the farm didn't take itself. */
+  credit: text(),
+  sourceUrl: text(),
   createdAt: createdAt(),
 });
 

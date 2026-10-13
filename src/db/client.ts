@@ -5,7 +5,7 @@ import type { PgAsyncDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 export type DB = PgAsyncDatabase<PgQueryResultHKT>;
 
 /** Same folder Netlify applies on deploy, so local, test and production share one migration history. */
-const MIGRATIONS = path.join(process.cwd(), "netlify", "database", "migrations");
+export const MIGRATIONS_DIR = path.join(process.cwd(), "netlify", "database", "migrations");
 
 type NetlifyGlobal = { Netlify?: { env?: { get(key: string): string | undefined } } };
 
@@ -29,7 +29,11 @@ function runningOnNetlify() {
  * - unset or "pglite": embedded Postgres in ./.data/pglite (local dev only — never on Netlify,
  *   where the filesystem is read-only and every function instance would get its own database)
  */
-export async function createDb(url: string | undefined, opts: { migrate?: boolean } = {}): Promise<DB> {
+export async function createDb(
+  url: string | undefined,
+  opts: { migrate?: boolean; migrationsFolder?: string } = {},
+): Promise<DB> {
+  const MIGRATIONS = opts.migrationsFolder ?? MIGRATIONS_DIR;
   if (url !== "memory" && netlifyEnv("NETLIFY_DB_URL")) {
     const { getDatabase } = await import("@netlify/database");
     const { drizzle } = await import("drizzle-orm/netlify-db");
