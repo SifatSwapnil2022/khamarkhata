@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // PGlite ships a WASM build of Postgres; keep it out of the server bundle.
-  serverExternalPackages: ["@electric-sql/pglite"],
+  // Database drivers load native/WASM pieces and WebSocket internals at runtime; bundling them breaks that.
+  serverExternalPackages: ["@electric-sql/pglite", "@netlify/database", "@neondatabase/serverless", "ws", "pg", "postgres"],
   poweredByHeader: false,
   async headers() {
     return [
