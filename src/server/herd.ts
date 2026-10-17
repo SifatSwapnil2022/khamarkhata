@@ -26,9 +26,16 @@ export async function getHerdSummary(db: DB, farmId: string): Promise<HerdSummar
     with
       active as (select * from animals where farm_id = ${farmId} and lifecycle = 'active'),
       latest as (select max(date) as d from milk_records where farm_id = ${farmId}),
+      -- Milking = milked in the week up to the latest record, and not dried off since. Counting only the
+      -- latest day would call 99 cows dry while the morning sheet is half filled in.
       milking as (
-        select distinct m.animal_id from milk_records m, latest
-        where m.farm_id = ${farmId} and m.date = latest.d
+        select m.animal_id from milk_records m, latest
+        where m.farm_id = ${farmId} and m.date > latest.d - 7
+        group by m.animal_id
+        having not exists (
+          select 1 from breeding_events e
+          where e.animal_id = m.animal_id and e.type = 'dry_off' and e.date >= max(m.date)
+        )
       ),
       preg as (
         select distinct p.animal_id from breeding_events p

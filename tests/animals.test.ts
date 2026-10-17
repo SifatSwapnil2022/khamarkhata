@@ -69,7 +69,8 @@ describe("on the demo farm", () => {
     expect(p.milk.length).toBeGreaterThan(10);
     expect(p.breeding.some((b) => b.type === "calving")).toBe(true);
     expect(p.vaccines.map((v) => v.vaccine)).toContain("FMD");
-    expect(p.photos[0]?.credit).toContain("Unsplash");
+    // Not every demo cow has a photo (one real photo per animal, never shared); any she has is credited.
+    expect(p.photos.every((ph) => /· (Unsplash|Pexels) ·/.test(ph.credit ?? ""))).toBe(true);
   });
 
   it("returns null for an unknown tag", async () => {

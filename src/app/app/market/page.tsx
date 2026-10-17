@@ -34,6 +34,7 @@ export default async function FarmMarketPage({ searchParams }: { searchParams: P
           items={[
             { key: "listings", href: "/app/market", label: m.tabs.listings, count: fmt.n(listings.filter((l) => l.status === "active").length) },
             { key: "inbox", href: "/app/market?tab=inbox", label: m.tabs.inbox, count: fresh ? fill(m.newCount, { n: fmt.n(fresh) }) : fmt.n(inbox.length) },
+            { key: "new", href: "/app/market/new", label: m.tabs.new },
           ]}
         />
       </PageHead>

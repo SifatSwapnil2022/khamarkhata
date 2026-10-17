@@ -1,30 +1,120 @@
 # Khamar Khata · খামার খাতা
 
-Farm records for Bangladeshi cattle farms. It covers three segments:
+A record book for cattle farms in Bangladesh, in Bangla and English, for a farmer with 2 cows or a farm with 2,000. It keeps each animal's milk, vaccines, breeding, weight and sale, and it has a cattle market where listings show the farm's own records.
 
-- **Dairy:** daily milk per cow.
-- **Breeding:** heat, AI, pregnancy and calving.
-- **Qurbani fattening:** weight gain toward a target by Eid.
+- **Dairy:** milk per cow, morning and evening; works without internet and sends later; milk sales and buyer dues.
+- **Breeding:** heat, AI, pregnancy checks, calving and dry-off, with a calendar of what's due and an inbreeding warning.
+- **Health:** vaccines for a whole group at once, treatments, and withdrawal periods that keep milk or meat out of sale.
+- **Qurbani:** weigh-ins by scale or tape, each bull's projected weight at Eid, cost and margin per bull.
+- **Money:** revenue, expenses and net by month and category; CSV downloads for Excel or Google Sheets.
+- **Cattle market:** list an animal in a few taps; buyers see its weight, milk and vaccines and send a question; the farmer's number stays hidden.
+- **Team:** owner, manager, worker and vet logins, each seeing only what their role needs.
 
-The goal is that every animal has its full history on record: mother and father, vaccines, treatments, weigh-ins and sale.
+---
 
-> Status: live at https://khamarkhata.netlify.app. Done so far:
-> - **3D home page:** a Three.js day on a Jamuna char, with the demo farm's real records on the animals
-> - phone sign-in, farms, team roles, Bangla/English
-> - **Animals:** list, profiles, pedigree
-> - **Dairy:** milking sheet that works offline, sales and dues
-> - **Health:** due list, group vaccination, withdrawal periods
-> - **Breeding:** calendar, fertility numbers, sires, inbreeding warning
-> - **Qurbani:** fattening board with Eid projections, cost and margin; weigh-ins by scale or tape
-> - **Cattle market:** listings built from farm records, buyer inquiries
->
-> Next: reports and CSV export.
+## বাংলায় নির্দেশনা (খামারিদের জন্য)
 
-| Animals | Cow profile | Qurbani bull |
+খামার খাতা ফোনে বা কম্পিউটারে চলে। কোনো অ্যাপ নামাতে হয় না, শুধু ওয়েবসাইটটি খুলুন। ২টি গরু হোক বা ১০০০টি, একইভাবে চলে।
+
+**কীভাবে ঢুকবেন**
+
+1. আপনার মোবাইল নম্বর লিখুন, যেমন ০১৭১২-৩৪৫৬৭৮। তারপর **“কোড পাঠান”** চাপুন।
+2. ফোনে একটি এসএমএস আসবে, তাতে ৬টি সংখ্যার কোড থাকবে।
+3. কোডটি লিখে **“যাচাই করে এগিয়ে যান”** চাপুন।
+4. প্রথমবার হলে খামারের নাম আর জেলা লিখুন। আপনার খামার তৈরি।
+
+কোড কাউকে বলবেন না। খামার খাতার কেউ কখনো কোড চাইবে না।
+
+**প্রতিদিনের কাজ**
+
+| কী করবেন | কোথায় চাপবেন |
+|---|---|
+| গরু যোগ করা | **পশু** → **পশু যোগ করুন** → ট্যাগ নম্বর, জাত, জন্মতারিখ → **সংরক্ষণ করুন** |
+| গরুর ছবি তোলা | পশুটি খুলুন → **ছবি তুলুন** → দিনের আলোয়, পাশ থেকে ছবি তুলুন |
+| দুধ লেখা | **দুধ** → **দুধ লিখুন** → সকাল বা বিকাল → প্রতিটি গাভীর লিটার → **দোহন সংরক্ষণ** |
+| টিকা বা চিকিৎসা | **স্বাস্থ্য** → **দলে টিকা** বা **চিকিৎসা লিখুন** |
+| গরম, প্রজনন, বাচ্চা দেওয়া | **প্রজনন** → **ঘটনা লিখুন** |
+| কোরবানির ষাঁড়ের ওজন | **কোরবানি** → **ওজন নিন** (পাল্লা না থাকলে ফিতার মাপেও হয়) |
+| হাটে বিক্রি | **বাজার** → **বিজ্ঞাপন দিন** → পশু বাছুন, দাম লিখুন |
+| কর্মী বা ডাক্তার যোগ | **টিম** → তার নম্বর লিখুন → ভূমিকা বাছুন → **আমন্ত্রণ পাঠান** |
+
+**ফোনে অ্যাপের মতো রাখুন:** অ্যান্ড্রয়েডে Chrome-এ ⋮ চেপে “Add to Home screen”; আইফোনে Safari-তে শেয়ার বোতাম চেপে “Add to Home Screen”।
+
+ওয়েবসাইটের **/help** পাতায় সব ধাপ ছবিসহ বড় অক্ষরে আছে, লগইন পাতাতেও ঢোকার নিয়ম লেখা আছে। উপরের **বাংলা / English** বোতামে যেকোনো সময় ভাষা বদলানো যায়। সাইট প্রথমে বাংলায় খোলে।
+
+---
+
+## Status
+
+Deployed on Vercel with a Neon Postgres database in Singapore. Every push to `main` deploys.
+
+Built so far:
+
+- **Public pages:**
+  - home page made of real photographs from Bangladeshi farms and haats, with slow photo motion and a scroll story
+  - help page with step-by-step instructions in Bangla
+  - sign-in instructions on the login page
+  - cattle market
+- **Sign-in:** phone sign-in with a one-time code, farms, team roles, Bangla/English, light and dark mode.
+- **Records:** animals with profiles and pedigree, and each animal's own photo taken with the phone camera.
+- **Farm work:** dairy, health, breeding, Qurbani, finance and CSV export.
+- **Market:** listing form and buyer inquiries.
+- **Install on phones:** installable on Android and iPhone home screens (web app manifest, safe-area layout).
+
+## Tools and libraries
+
+| Area | Tool | Why |
 |---|---|---|
-| ![Animals list](docs/screenshots/animals.png) | ![Cow profile with milk chart](docs/screenshots/animal-cow.png) | ![Qurbani bull with weight projection](docs/screenshots/animal-qurbani.png) |
+| Framework | [Next.js 15](https://nextjs.org/docs) (App Router, Server Components, Server Actions) | Pages render on the server, so cheap phones on slow connections get readable HTML first |
+| UI | [React 19](https://react.dev), [Tailwind CSS 4](https://tailwindcss.com/docs) | Mobile-first layouts and design tokens for light and dark mode |
+| Language | [TypeScript 6](https://www.typescriptlang.org/docs/) (strict) | |
+| Database | [PostgreSQL](https://www.postgresql.org/docs/): [Neon](https://neon.tech/docs) in production, [PGlite](https://pglite.dev) (Postgres in WebAssembly) locally and in tests | No database setup for development; tests run against real Postgres |
+| ORM and migrations | [Drizzle ORM and drizzle-kit](https://orm.drizzle.team/docs/overview) | Typed queries; plain SQL migrations committed to the repo |
+| Postgres driver | [postgres.js](https://github.com/porsager/postgres) | |
+| Validation | [Zod 4](https://zod.dev) | Every form is checked on the server |
+| Icons | [Lucide](https://lucide.dev) | |
+| Fonts | [Noto Sans Bengali](https://fonts.google.com/noto/specimen/Noto+Sans+Bengali), [Manrope](https://fonts.google.com/specimen/Manrope), [Figtree](https://fonts.google.com/specimen/Figtree), self-hosted through [Fontsource](https://fontsource.org) | Bangla renders the same on every phone, with no external font requests |
+| Charts | Hand-built SVG components | Small, readable at 12 px, each with a "show as table" option |
+| Tests | [Vitest](https://vitest.dev) for unit and database tests, [Playwright](https://playwright.dev) for browser checks during development | |
+| Linting | [ESLint 9](https://eslint.org) with `eslint-config-next` | |
+| Hosting | [Vercel](https://vercel.com/docs) (region `sin1`, Singapore) | |
+| CI | GitHub Actions: lint, type-check, tests, production build | |
+| Photos | [Unsplash](https://unsplash.com/license) and [Pexels](https://www.pexels.com/license/) photos taken in Bangladesh, plus the project's own home-page photo | Real farms and haats, credited on every use |
 
-Screenshots were taken offline, so the Unsplash photos show as empty frames; on the live site they load.
+## Demo farm
+
+Every database includes a demo farm, *Shonali Dairy & Agro (demo)* in Shahjadpur, Sirajganj, with records as of 13 Oct 2026. Everything on it is sample data and is labelled as such on the site.
+
+- **Herd:**
+  - 100 milk cows (HF, Sahiwal and Jersey crosses, Red Chittagong, Pabna and local)
+  - 50 calves, each linked to its mother and to the sire or AI straw
+  - 100 Qurbani bulls
+  - 10 breeding bulls
+- **Records:**
+  - 90 days of milk
+  - full breeding history
+  - vaccines and treatments
+  - weigh-ins
+  - feed
+  - milk sales
+  - expenses
+  - market listings
+- **Names:** cows have village names, and a name that describes the coat always matches it (Lali is red, Dholi is white, Kali is black). Qurbani bulls carry the kind of names reported from Eid cattle haats, matched to the coat:
+  - black: *Kala Pahar*, *Kalo Manik*
+  - white: *Dhola Pahar*, *Shada Pahar*
+  - red: *Lal Pahar*, *Lalu*
+  - any coat: *Raja Babu*, *Sultan*, *Badsha*
+
+  Names of living people, popular at some haats, are left out on purpose.
+- **Photos:**
+  - 77 animals have a real photograph, and no two animals share one.
+  - Each photo was taken in Bangladesh, comes from Unsplash or Pexels, and shows its photographer and a link to its page.
+  - Where a photo's page doesn't state the coat colour, the animal's record leaves the colour blank and its name doesn't name a colour, so the name never contradicts the picture.
+  - The other animals show "No photo yet", as on a real farm. Farmers add their own with the **Add photo** button.
+
+Sign in as the owner with **01700-000001**. Staff accounts: 01700-000002 (manager), -03 and -04 (workers), -05 (vet). Many visitors can use the demo login at once.
+
+The demo data comes from migrations generated by `scripts/demo/generate-demo-farm.ts` and `scripts/demo/assign-real-photos.mts`.
 
 ## Run it
 
@@ -38,37 +128,9 @@ npm run dev
 
 Open http://localhost:3000 and sign in with any Bangladeshi number, such as `01711-111111`. In development the 6-digit code appears on the login screen and in the terminal.
 
-No database setup is needed. Local dev uses PGlite, a full Postgres embedded in the app (stored in `./.data`), and it migrates itself on first start.
+No database setup is needed. Local development uses PGlite (stored in `./.data`), which migrates itself on first start. `npm run db:reset` wipes it; the demo farm returns on the next start.
 
-### Demo farm
-
-Every database (local and on Netlify) includes a demo farm, *Shonali Dairy & Agro* in Shahjadpur, Sirajganj, with data as of 13 Oct 2026:
-
-- **Herd:**
-  - 100 milk cows (HF, Sahiwal and Jersey crosses, plus Red Chittagong, Pabna and local)
-  - 50 calves, each linked to its mother and to the sire or AI straw
-  - 100 Qurbani bulls bought at haats after Eid 2026
-  - 10 breeding bulls
-- **Records:**
-  - 90 days of milk (morning and evening)
-  - full breeding history (heat, AI, pregnancy checks, calving, dry-off)
-  - vaccines and treatments, including milk withdrawal periods
-  - fortnightly weigh-ins
-  - daily feed logs
-  - milk sales and dues
-  - expenses
-  - 12 bulls listed for Eid 2027
-- **Photos:** every photo was taken in Bangladesh, from Unsplash (Unsplash License), with the photographer credited on each animal.
-
-Sign in as the owner with **01700-000001**. Staff accounts are 01700-000002 (manager), -03 and -04 (workers) and -05 (vet).
-
-The data comes from a migration generated by `scripts/demo/generate-demo-farm.ts`, which is deterministic. Tests run without it.
-
-```bash
-npm run db:reset  # wipe the local database (the demo farm comes back on next start)
-```
-
-### Using a real Postgres
+To use a real Postgres instead:
 
 ```bash
 docker compose up -d
@@ -82,51 +144,32 @@ npm run dev
 
 1. Create a free Postgres on [Neon](https://neon.tech) (region: Singapore) and copy its connection string.
 2. Import the GitHub repo on [Vercel](https://vercel.com/new). Framework: Next.js.
-3. Add environment variables: `DATABASE_URL` (Neon, pooled), `DATABASE_URL_UNPOOLED` (Neon, direct; optional),
-   `OTP_SECRET` (32+ random characters), `SMS_PROVIDER=console`, `DEMO_MODE=true`.
+3. Add these environment variables:
+   - `DATABASE_URL` (Neon, pooled)
+   - `DATABASE_URL_UNPOOLED` (Neon, direct; optional)
+   - `OTP_SECRET` (32+ random characters)
+   - `SMS_PROVIDER=console`
+   - `DEMO_MODE=true`
 4. Deploy. The `vercel-build` script applies the migrations (schema and demo farm) to Neon before building.
+
+`DEMO_MODE=true` shows sign-in codes on screen for any number. Turn it off once a real SMS gateway is connected.
 
 ## Scripts
 
 | Script | What it does |
 |---|---|
 | `npm run dev` / `build` / `start` | Next.js |
-| `npm test` | Vitest: phone rules, permissions, OTP and session security, team flows, against a real (in-memory) Postgres |
+| `npm test` | Vitest against an in-memory Postgres. It covers: phone rules, permissions, OTP and session security, team flows, dairy, health, breeding, Qurbani, finance, animal photos, and a 1,000-animal farm. |
 | `npm run lint` / `typecheck` | ESLint, `tsc --noEmit` |
 | `npm run db:generate` | Generate a SQL migration after editing `src/db/schema.ts` |
 | `npm run db:migrate` | Apply migrations to `DATABASE_URL` |
 
-CI (`.github/workflows/ci.yml`) runs lint, type-check, tests and a production build on every push.
+## Notes and limits
 
-## What's in phase 1
-
-- **Phone OTP sign-in:**
-  - Bangladeshi number validation (Bangla digits accepted)
-  - hashed codes, resend cooldown, per-phone and per-IP limits
-  - attempt lockout
-  - httpOnly session cookies, with only a hash of the token stored
-- **Farms:** onboarding with district (all 64), upazila and segments. A user can belong to several farms and switch between them.
-- **Team:**
-  - roles: owner, manager, worker, vet
-  - invite by phone, accept/decline, change role, remove
-  - every change written to an audit log
-- **Permissions:** one server-enforced matrix (see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#roles-and-permissions)).
-- **Settings:** farm details and the breeding rules later phases use for due dates (heat cycle 21 d, PD 75 d, gestation 283 d, dry-off 60 d).
-- **Bangla/English toggle.** Locale is detected from the browser and remembered.
-- **Light and dark mode.** Mobile-first layouts.
-
-## Roadmap
-
-1. ✅ Setup, auth, farms, roles
-2. ✅ Animal records: list with filters, profiles with milk and weight charts, pedigree (dam/sire), breeding and health timelines, add/edit/sold
-3. Dairy: offline milk entry, lactation, milk sales
-4. Health: vaccines, treatments with withdrawal warnings, reminders
-5. Breeding: calendar, sire catalog, inbreeding check
-6. Qurbani: weigh-ins, projected weight at Eid, cost per bull
-7. Marketplace: listings built from verified records, inquiries, mark sold
-8. Analytics dashboard and exports
-9. Public home page: video hero and a Three.js farm scene
-10. Polish: accessibility, performance, i18n completeness
+- **Photo storage:** animal photos are shrunk on the phone (longest side 1280 px, JPEG) and stored in Postgres. For farms with thousands of photos, an object store such as Vercel Blob or S3 would be the next step.
+- **SMS:** no gateway is connected yet. `SMS_PROVIDER=console` logs codes instead of sending them.
+- **Offline use:** milk entry works offline. The other forms need a connection.
+- **Estimates:** due dates for breeding, Eid weight projections and tape weights are estimates and are labelled as such.
 
 ## Docs
 

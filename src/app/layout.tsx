@@ -8,9 +8,15 @@ import { getLocale } from "@/i18n";
 export const metadata: Metadata = {
   title: { default: "Khamar Khata — খামার খাতা", template: "%s · Khamar Khata" },
   description: "Farm records for Bangladeshi cattle farms: milk, breeding, vaccines and Qurbani fattening.",
+  applicationName: "Khamar Khata",
+  appleWebApp: { capable: true, title: "খামার খাতা", statusBarStyle: "default" },
+  icons: { apple: "/icons/apple-touch-icon.png" },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
+  // Lets the layout use the iPhone's safe areas (notch, home bar) via env(safe-area-inset-*).
+  viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
     { media: "(prefers-color-scheme: dark)", color: "#0a1410" },

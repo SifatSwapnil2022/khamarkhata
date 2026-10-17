@@ -1,5 +1,5 @@
 import "server-only";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 import { bn } from "./bn";
 import { en, type Dictionary } from "./en";
 
@@ -8,12 +8,13 @@ export const LOCALE_COOKIE = "kk_lang";
 
 const dictionaries: Record<Locale, Dictionary> = { bn, en };
 
-/** Cookie first; otherwise Bangla if the browser asks for it, else English. */
+/**
+ * Cookie first, otherwise Bangla. Most farmers' phones are set to English even when they read
+ * Bangla far more easily, so the browser's language isn't a good guide. The switch is on every page.
+ */
 export async function getLocale(): Promise<Locale> {
   const fromCookie = (await cookies()).get(LOCALE_COOKIE)?.value;
-  if (fromCookie === "bn" || fromCookie === "en") return fromCookie;
-  const accept = (await headers()).get("accept-language") ?? "";
-  return /\bbn\b/i.test(accept) ? "bn" : "en";
+  return fromCookie === "en" ? "en" : "bn";
 }
 
 export async function getDictionary() {

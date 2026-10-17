@@ -3,8 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { LangToggle } from "@/components/LangToggle";
+import { Steps } from "@/components/Steps";
 import { Logo, Notice } from "@/components/ui";
 import { getDictionary } from "@/i18n";
+import { formatter } from "@/lib/format";
 import { photoAt } from "@/lib/photos";
 import { getCurrentUser, safeNext } from "@/server/auth";
 import { LoginFlow } from "./LoginFlow";
@@ -56,6 +58,22 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             </div>
           ) : null}
           <LoginFlow t={t.login} next={next} initialPhone={params.demo === "1" && process.env.DEMO_MODE === "true" ? "01700-000001" : ""} />
+
+          {/* Plain instructions, always in view, for anyone who hasn't used an OTP login before */}
+          <section aria-labelledby="how-h" className="mt-10 rounded-[20px] bg-primary-soft/60 p-5">
+            <h2 id="how-h" className="mb-4 text-[19px] font-extrabold">
+              {t.help.loginTitle}
+            </h2>
+            <Steps steps={t.help.login} digits={formatter(locale).digits} size="sm" />
+            <ul className="mt-4 flex list-disc flex-col gap-1 pl-5 text-[14.5px] text-ink-2">
+              {t.help.loginTips.map((tip) => (
+                <li key={tip}>{tip}</li>
+              ))}
+            </ul>
+            <Link href="/help" className="mt-4 inline-flex min-h-11 items-center font-semibold">
+              {t.help.moreHelp} →
+            </Link>
+          </section>
         </div>
       </main>
     </div>

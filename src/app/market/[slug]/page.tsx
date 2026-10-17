@@ -13,6 +13,7 @@ import { isDemoFarm } from "@/lib/demo";
 import { fill, formatter } from "@/lib/format";
 import { getCurrentUser } from "@/server/auth";
 import { bdToday } from "@/server/common";
+import { coatLabel } from "@/lib/coat";
 import { getListing } from "@/server/market";
 import { InquiryForm } from "./InquiryForm";
 
@@ -47,7 +48,7 @@ export default async function ListingPage({ params }: Params) {
     { label: m.fact.breed, value: c.breed ?? "—" },
     { label: m.fact.age, value: fmt.age(c.birthDate, today, t.animals.ageFmt) },
     { label: m.fact.sex, value: m.sexes[c.sex] },
-    ...(l.color ? [{ label: m.fact.colour, value: l.color }] : []),
+    ...(l.color ? [{ label: m.fact.colour, value: coatLabel(l.color, locale)! }] : []),
     ...(lastW ? [{ label: m.fact.weight, value: `${fmt.n(lastW.kg)} ${t.animals.kg}`, note: fill(m.fact.weightBy, { method: m.methods[lastW.method as "scale" | "tape"] ?? lastW.method, date: fmt.date(lastW.date) }) }] : []),
     ...(milkAvg ? [{ label: m.fact.milk, value: fill(m.milk, { n: fmt.n(milkAvg, 1) }), note: m.fact.milkNote }] : []),
     { label: m.fact.origin, value: l.origin === "born" ? m.fact.born : m.fact.bought.replace("{date}", fmt.date(null)) },

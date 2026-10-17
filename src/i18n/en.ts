@@ -1,3 +1,4 @@
+import { helpEn } from "./help";
 import { homeEn } from "./home";
 import { financeEn } from "./finance";
 import { animalsEn } from "./animals";
@@ -34,6 +35,7 @@ export const en = {
     somethingWrong: "Something went wrong. Please try again.",
   },
   home: homeEn,
+  help: helpEn,
   login: {
     photoBy: "Photo:",
     title: "Sign in with your phone",
@@ -150,6 +152,7 @@ export const en = {
       "listing.withdrawn": "took a listing down",
       "animal.create": "added an animal",
       "animal.update": "edited an animal",
+      "animal.photo": "added a photo of {tag}",
       "animal.sold": "recorded a sale",
       "animal.dead": "recorded a death",
       "animal.culled": "recorded a cull",

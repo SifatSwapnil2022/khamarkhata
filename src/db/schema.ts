@@ -13,6 +13,7 @@
 import { sql } from "drizzle-orm";
 import {
   boolean,
+  bytea,
   date,
   index,
   integer,
@@ -318,6 +319,20 @@ export const animalMedia = pgTable("animal_media", {
   /** Photographer credit and source page, for photos the farm didn't take itself. */
   credit: text(),
   sourceUrl: text(),
+  createdAt: createdAt(),
+});
+
+/**
+ * Photos people take with their phone. Kept in the database so the app needs no separate file store;
+ * the phone shrinks each photo to about 150–300 KB before it's sent. Served at /media/<id>.
+ */
+export const mediaFiles = pgTable("media_files", {
+  id: id(),
+  farmId: farmRef(),
+  contentType: text().notNull(),
+  bytes: bytea().notNull(),
+  size: integer().notNull(),
+  createdById: uuid().references(() => users.id, { onDelete: "set null" }),
   createdAt: createdAt(),
 });
 

@@ -21,9 +21,10 @@ export function SiteHeader({
   return (
     <header className={overlay ? "theme-light absolute inset-x-0 top-0 z-20" : "sticky top-0 z-20 border-b border-line bg-surface/90 backdrop-blur"}>
       <div className="page-column flex h-[4.5rem] items-center justify-between gap-3">
-        <Link href="/" className={`flex items-center gap-2.5 no-underline ${overlay ? "rounded-2xl bg-white/95 py-1.5 pr-3.5 pl-1.5 text-ink shadow-sm" : "text-ink"}`}>
+        <Link href="/" className={`flex items-center gap-2.5 no-underline ${overlay ? "rounded-2xl bg-white/95 py-1.5 pr-3.5 pl-1.5 text-ink shadow-sm max-[420px]:pr-1.5" : "text-ink"}`}>
           <Logo size={36} />
-          <span className="font-display text-[18px] font-extrabold tracking-[-0.02em] whitespace-nowrap">{t.common.appName}</span>
+          {/* On narrow phones the name would push the buttons off screen; the hero and page titles carry it there. */}
+          <span className="font-display text-[18px] font-extrabold tracking-[-0.02em] whitespace-nowrap max-[420px]:sr-only">{t.common.appName}</span>
         </Link>
         <nav aria-label={t.common.appName} className="flex items-center gap-1.5 sm:gap-2">
           <Link
@@ -34,8 +35,16 @@ export function SiteHeader({
           >
             {t.market.title}
           </Link>
+          <Link
+            href="/help"
+            className={`hidden min-h-11 items-center rounded-xl px-3.5 text-[15px] font-semibold no-underline md:inline-flex ${
+              overlay ? "bg-white/90 text-ink hover:bg-white" : "text-ink-2 hover:bg-surface-2 hover:text-ink"
+            }`}
+          >
+            {t.help.nav}
+          </Link>
           <LangToggle locale={locale} path={path} label={t.common.switchTo} compact />
-          <Link href={signedIn ? "/app" : "/login"} className={buttonClass("primary")}>
+          <Link href={signedIn ? "/app" : "/login"} className={buttonClass("primary", "max-sm:px-3.5")}>
             {signedIn ? t.common.openFarm : t.common.signIn}
           </Link>
         </nav>
@@ -59,6 +68,11 @@ export function SiteFooter({ t }: { t: Dictionary }) {
           <li>
             <Link href="/market" className="text-ink-2 no-underline hover:text-primary">
               {t.market.title}
+            </Link>
+          </li>
+          <li>
+            <Link href="/help" className="text-ink-2 no-underline hover:text-primary">
+              {t.help.nav}
             </Link>
           </li>
           <li>

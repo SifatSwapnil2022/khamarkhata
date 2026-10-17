@@ -11,6 +11,8 @@ import { fill, formatter, type Fmt } from "@/lib/format";
 import { can } from "@/lib/rbac";
 import { requireFarm } from "@/server/auth";
 import { addDays, daysBetween, getAnimalProfile, type AnimalProfile, type ParentRef, type PedigreeNode } from "@/server/animals";
+import { coatLabel } from "@/lib/coat";
+import { PhotoButton } from "./PhotoButton";
 import { AnimalPhoto } from "../AnimalPhoto";
 import { MilkChart, WeightChart } from "./charts";
 
@@ -97,6 +99,11 @@ export default async function AnimalPage({ params }: Params) {
                 )}
               </figcaption>
             ) : null}
+            {canWrite ? (
+              <div className="absolute top-3 left-3">
+                <PhotoButton tag={animal.tag} hasPhoto={Boolean(photo)} t={a.photo} />
+              </div>
+            ) : null}
           </figure>
           <div className="flex min-w-0 flex-col p-6 sm:p-8">
             <div className="flex flex-wrap items-center gap-2.5">
@@ -110,7 +117,7 @@ export default async function AnimalPage({ params }: Params) {
               </p>
             ) : null}
             <p className="mt-3 text-[17px] text-ink-2">
-              {[breed, animal.color, fmt.age(animal.birthDate, today, a.ageFmt), animal.shed].filter(Boolean).join(" · ")}
+              {[breed, coatLabel(animal.color, locale), fmt.age(animal.birthDate, today, a.ageFmt), animal.shed].filter(Boolean).join(" · ")}
             </p>
             {chips.length ? (
               <div className="mt-4 flex flex-wrap gap-2">
@@ -217,7 +224,7 @@ export default async function AnimalPage({ params }: Params) {
                 ) : null}
                 {animal.purchasePriceTk ? <Detail label={a.form.purchasePrice}>{fmt.tk(animal.purchasePriceTk)}</Detail> : null}
                 <Detail label={a.form.sex}>{a.sex[animal.sex]}</Detail>
-                {animal.color ? <Detail label={p.color}>{animal.color}</Detail> : null}
+                {animal.color ? <Detail label={p.color}>{coatLabel(animal.color, locale)}</Detail> : null}
                 {animal.shed ? <Detail label={a.shed}>{animal.shed}</Detail> : null}
                 {animal.govtId ? <Detail label={p.govtId}>{animal.govtId}</Detail> : null}
               </dl>

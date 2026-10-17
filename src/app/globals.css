@@ -257,16 +257,55 @@
   }
 }
 
-/* ───────────────────────── Home: the farm scene ───────────────────────── */
+/* ───────────────────────── Home: real photographs, slow motion ───────────────────────── */
 
 @layer components {
   /* The Bangla name is the hero's picture as much as its title. */
   .hero-wordmark {
     font-family: "Noto Sans Bengali Variable", var(--font-display);
     font-weight: 800;
-    font-size: clamp(2.7rem, 8.6vw, 7.75rem);
+    font-size: clamp(2.9rem, 9vw, 7.5rem);
     line-height: 0.95;
     letter-spacing: -0.01em;
+  }
+
+  /* A photograph that drifts very slowly, like a camera breathing. Off for reduced motion (see above). */
+  .ken-burns {
+    animation: ken-burns 22s ease-out both;
+    transform-origin: 60% 45%;
+  }
+  .ken-burns-loop {
+    animation: ken-burns-loop 18s ease-in-out infinite alternate;
+    transform-origin: 50% 50%;
+  }
+
+  /* Darkens the photo where text sits, so white type stays readable on any picture. */
+  .photo-scrim {
+    background:
+      linear-gradient(to top, rgb(5 20 12 / 0.92) 0%, rgb(5 20 12 / 0.55) 38%, rgb(5 20 12 / 0) 68%),
+      linear-gradient(to bottom, rgb(5 20 12 / 0.45) 0%, rgb(5 20 12 / 0) 22%);
+  }
+  @media (min-width: 1024px) {
+    .photo-scrim {
+      background:
+        linear-gradient(to right, rgb(5 20 12 / 0.88) 0%, rgb(5 20 12 / 0.55) 36%, rgb(5 20 12 / 0) 62%),
+        linear-gradient(to bottom, rgb(5 20 12 / 0.45) 0%, rgb(5 20 12 / 0) 22%);
+    }
+  }
+
+  /* The record card sitting on a photo: that animal's real numbers. */
+  .record-card {
+    background: rgb(255 255 255 / 0.96);
+    color: #0f2419;
+    box-shadow: 0 18px 44px rgb(5 20 12 / 0.28);
+  }
+
+  .story-photo {
+    opacity: 0;
+    transition: opacity 900ms var(--ease-out-quint);
+  }
+  .story-photo[data-on="true"] {
+    opacity: 1;
   }
 
   .scroll-cue-line {
@@ -276,100 +315,37 @@
     height: 2px;
     overflow: hidden;
     border-radius: 2px;
-    background: color-mix(in oklab, var(--ink) 18%, transparent);
+    background: rgb(255 255 255 / 0.3);
   }
   .scroll-cue-line::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: var(--primary);
+    background: #fff;
     transform: translateX(-100%);
     animation: cue 2.4s var(--ease-out-quint) infinite;
-  }
-
-  .beat-panel {
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    box-shadow: 0 18px 50px rgb(8 30 20 / 0.12);
-  }
-
-  /* Ear tags float over the animals, punched like the real plastic tags. */
-  .ear-tag {
-    opacity: 0;
-    transition: opacity 280ms ease;
-  }
-  .ear-tag[data-on="true"] {
-    opacity: 1;
-  }
-  .ear-tag-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    min-width: 7.5rem;
-    max-width: 15rem;
-    padding: 0.6rem 0.8rem 0.55rem 1.55rem;
-    border-radius: 12px 12px 12px 4px;
-    background: rgb(255 255 255 / 0.95);
-    box-shadow: 0 8px 22px rgb(8 30 20 / 0.18);
-    transform: translate(-0.6rem, calc(-100% - 14px));
-    font-family: var(--font-sans);
-    line-height: 1.2;
-    white-space: nowrap;
-  }
-  .ear-tag-card::before {
-    content: "";
-    position: absolute;
-    left: 0.6rem;
-    top: 0.72rem;
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 999px;
-    background: var(--tag-hole, var(--primary));
-    box-shadow: 0 0 0 3px color-mix(in oklab, var(--tag-hole, var(--primary)) 22%, transparent);
-  }
-  .ear-tag-card::after {
-    content: "";
-    position: absolute;
-    left: 0.6rem;
-    bottom: -14px;
-    width: 2px;
-    height: 14px;
-    background: rgb(255 255 255 / 0.9);
-  }
-  .ear-tag[data-flip="true"] .ear-tag-card {
-    transform: translate(calc(-100% + 0.6rem), calc(-100% - 14px));
-    border-radius: 12px 12px 4px 12px;
-  }
-  .ear-tag[data-flip="true"] .ear-tag-card::after {
-    left: auto;
-    right: 0.6rem;
-  }
-  .ear-tag-card[data-tone="kin"] {
-    --tag-hole: #19a35f;
-  }
-  .ear-tag-card[data-tone="sire"] {
-    --tag-hole: #5b6cff;
-  }
-  .ear-tag-card[data-tone="weight"] {
-    --tag-hole: #f07b3f;
-  }
-  .ear-tag-id {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 14px;
-    color: #0f2419;
-  }
-  .ear-tag-line {
-    font-size: 12.5px;
-    font-weight: 500;
-    color: #4a5d52;
-    font-variant-numeric: tabular-nums;
   }
 
   .photo-strip {
     scrollbar-width: thin;
     scrollbar-color: rgb(255 255 255 / 0.3) transparent;
+  }
+}
+
+@keyframes ken-burns {
+  from {
+    transform: scale(1.14);
+  }
+  to {
+    transform: scale(1.02);
+  }
+}
+@keyframes ken-burns-loop {
+  from {
+    transform: scale(1.03) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.12) translate3d(-1.5%, -1%, 0);
   }
 }
 

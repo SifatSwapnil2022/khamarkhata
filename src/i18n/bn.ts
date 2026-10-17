@@ -1,3 +1,4 @@
+import { helpBn } from "./help";
 import { homeBn } from "./home";
 import { financeBn } from "./finance";
 import { animalsBn } from "./animals";
@@ -35,6 +36,7 @@ export const bn: Dictionary = {
     somethingWrong: "কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।",
   },
   home: homeBn,
+  help: helpBn,
   login: {
     photoBy: "ছবি:",
     title: "মোবাইল নম্বর দিয়ে লগইন",
@@ -151,6 +153,7 @@ export const bn: Dictionary = {
       "listing.withdrawn": "বিজ্ঞাপন বন্ধ করেছেন",
       "animal.create": "পশু যোগ করেছেন",
       "animal.update": "পশুর তথ্য বদলেছেন",
+      "animal.photo": "{tag}-এর ছবি দিয়েছেন",
       "animal.sold": "বিক্রি লিখেছেন",
       "animal.dead": "মৃত্যু লিখেছেন",
       "animal.culled": "বাদ দেওয়া লিখেছেন",
