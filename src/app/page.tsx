@@ -77,7 +77,7 @@ export default async function HomePage() {
 
       <main id="main">
         {/* ───── A day on the farm: the 3D scene stays put while the day passes ───── */}
-        <section id={TRACK} aria-label={h.title} className="relative" style={{ height: "500svh" }}>
+        <section id={TRACK} aria-label={h.title} className="theme-light relative" style={{ height: "500svh" }}>
           <div className="sticky top-0 h-svh overflow-hidden">
             <HomeScene
               trackId={TRACK}

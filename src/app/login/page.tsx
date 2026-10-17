@@ -22,7 +22,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       <aside className="relative isolate hidden overflow-hidden bg-deep md:block">
         <Image src={photo.url} alt="" fill priority sizes="50vw" className="drift -z-10 object-cover" />
         <div className="flex h-full flex-col justify-between p-8 lg:p-10">
-          <Link href="/" className="flex w-fit items-center gap-3 rounded-2xl bg-white/95 py-2 pr-4 pl-2 text-ink no-underline shadow-sm">
+          <Link href="/" className="theme-light flex w-fit items-center gap-3 rounded-2xl bg-white/95 py-2 pr-4 pl-2 text-ink no-underline shadow-sm">
             <Logo size={36} />
             <span className="font-display text-lg font-extrabold tracking-[-0.02em]">{t.common.appName}</span>
           </Link>

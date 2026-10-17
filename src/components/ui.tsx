@@ -15,7 +15,7 @@ const variants: Record<Variant, string> = {
   secondary: "border border-line-strong bg-surface text-ink hover:border-primary hover:text-primary",
   ghost: "text-ink-2 hover:bg-surface-2",
   danger: "border border-danger-ink/40 bg-surface text-danger-ink hover:bg-danger-bg",
-  light: "bg-white text-deep hover:bg-primary-soft",
+  light: "bg-white text-[#0c3b25] hover:bg-[#e2f1e7]",
 };
 
 export function Button({ variant = "primary", className, ...props }: ComponentProps<"button"> & { variant?: Variant }) {

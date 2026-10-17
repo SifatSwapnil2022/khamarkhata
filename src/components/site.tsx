@@ -19,7 +19,7 @@ export function SiteHeader({
 }) {
   const overlay = tone === "overlay";
   return (
-    <header className={overlay ? "absolute inset-x-0 top-0 z-20" : "sticky top-0 z-20 border-b border-line bg-surface/90 backdrop-blur"}>
+    <header className={overlay ? "theme-light absolute inset-x-0 top-0 z-20" : "sticky top-0 z-20 border-b border-line bg-surface/90 backdrop-blur"}>
       <div className="page-column flex h-[4.5rem] items-center justify-between gap-3">
         <Link href="/" className={`flex items-center gap-2.5 no-underline ${overlay ? "rounded-2xl bg-white/95 py-1.5 pr-3.5 pl-1.5 text-ink shadow-sm" : "text-ink"}`}>
           <Logo size={36} />
