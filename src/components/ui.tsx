@@ -124,7 +124,7 @@ export function EarTag({ tag, className, tone = "light" }: { tag: string; classN
   return (
     <span
       className={clsx(
-        "inline-flex items-center rounded-md px-1.5 py-px text-[13px] font-bold tracking-wide tabular",
+        "inline-flex shrink-0 items-center rounded-md px-1.5 py-px text-[13px] font-bold tracking-wide whitespace-nowrap tabular",
         tone === "solid" ? "bg-white/95 text-deep shadow-sm" : "bg-primary-soft text-primary-ink",
         className,
       )}
@@ -283,19 +283,19 @@ export function StatCard({
       <div className="flex items-start justify-between gap-3">
         <span className="text-[15px] font-medium text-muted">{label}</span>
         {icon ? (
-          <span aria-hidden="true" className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary">
+          <span aria-hidden="true" className="hidden size-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary sm:flex">
             {icon}
           </span>
         ) : null}
       </div>
-      <span className={clsx("mt-1 block font-display text-[30px] leading-tight font-extrabold tracking-[-0.02em] tabular", accent)}>
+      <span className={clsx("mt-1 block font-display text-[24px] leading-tight font-extrabold tracking-[-0.02em] whitespace-nowrap tabular sm:text-[30px]", accent)}>
         {value}
         {unit ? <span className="ml-1.5 font-sans text-[15px] font-medium tracking-normal text-muted">{unit}</span> : null}
       </span>
       {note ? <span className="mt-1 block text-sm text-muted">{note}</span> : null}
     </>
   );
-  const cls = "block rounded-2xl border border-line bg-surface p-5 shadow-[var(--shadow-card)]";
+  const cls = "block rounded-2xl border border-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5";
   return href ? (
     <Link href={href} className={clsx(cls, "text-ink no-underline transition-colors hover:border-primary/40")}>
       {body}

@@ -9,6 +9,7 @@ import { SiteFooter, SiteHeader } from "@/components/site";
 import { Badge, Card } from "@/components/ui";
 import { getDb } from "@/db";
 import { getDictionary } from "@/i18n";
+import { isDemoFarm } from "@/lib/demo";
 import { fill, formatter } from "@/lib/format";
 import { getCurrentUser } from "@/server/auth";
 import { bdToday } from "@/server/common";
@@ -60,7 +61,12 @@ export default async function ListingPage({ params }: Params) {
           ← {m.back}
         </Link>
 
-        <div className="mt-2 grid gap-8 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+        {isDemoFarm(c.farm) ? (
+          <p role="note" className="mt-2 rounded-xl bg-warn-bg px-4 py-3 text-[15px] font-medium text-warn-ink">
+            {m.demoNote}
+          </p>
+        ) : null}
+        <div className="mt-4 grid gap-8 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
           {/* Left: photo and record */}
           <div className="flex min-w-0 flex-col gap-8">
             <figure className="relative overflow-hidden rounded-3xl border border-line bg-surface">
@@ -85,6 +91,7 @@ export default async function ListingPage({ params }: Params) {
                   <BadgeCheck aria-hidden="true" className="size-5 text-primary" /> {m.facts}
                 </h2>
                 <p className="mt-1 text-sm text-muted">{fill(m.factsNote, { farm: c.farm })}</p>
+                <p className="mt-1 text-sm text-muted">{m.noCertify}</p>
               </div>
               <Card>
                 <dl className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-3">

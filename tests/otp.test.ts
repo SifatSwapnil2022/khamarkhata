@@ -92,6 +92,22 @@ describe("verifyOtp", () => {
     expect((await verifyOtp(db, { phone: PHONE, code: b.value.code }, { now: at(t0, 71) })).ok).toBe(true);
   });
 
+  it("lets several people share the demo login without locking each other out", async () => {
+    const t0 = new Date("2026-10-13T10:00:00Z");
+    const codes: string[] = [];
+    for (let i = 0; i < 5; i++) {
+      const r = await requestOtp(db, { phone: PHONE, ip: `10.0.0.${i}`, shared: true }, { sms, now: at(t0, i) });
+      if (!r.ok) throw new Error(`request ${i} refused: ${r.error}`);
+      codes.push(r.value.code);
+    }
+    // Each visitor's own code works, in any order, once.
+    for (const i of [2, 0, 4]) expect((await verifyOtp(db, { phone: PHONE, code: codes[i]! }, { now: at(t0, 30) })).ok).toBe(true);
+    expect((await verifyOtp(db, { phone: PHONE, code: codes[2]! }, { now: at(t0, 31) })).ok).toBe(false);
+    // Unshared numbers keep the cooldown.
+    await requestOtp(db, { phone: "01812345678" }, { sms, now: t0 });
+    expect((await requestOtp(db, { phone: "01812345678" }, { sms, now: at(t0, 5) })).ok).toBe(false);
+  });
+
   it("locks the code after too many wrong attempts", async () => {
     const r = await requestOtp(db, { phone: PHONE }, { sms });
     if (!r.ok) throw new Error("request failed");

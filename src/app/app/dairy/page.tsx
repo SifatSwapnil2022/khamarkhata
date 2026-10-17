@@ -97,7 +97,7 @@ export default async function DairyPage() {
             <StatCard
               icon={<Wallet className="size-5" />}
               label={d.stats.dues}
-              value={fmt.tk(due)}
+              value={fmt.tkShort(due)}
               note={fill(owing === 1 ? d.stats.duesNote1 : d.stats.duesNote, { n: fmt.n(owing) })}
               tone={due > 0 ? "warn" : undefined}
               href="/app/dairy/sales"

@@ -1,6 +1,6 @@
 export const marketEn = {
   title: "Cattle market",
-  subtitle: "Cows and bulls from farms that keep records. Weights, milk and vaccines come from the farm's own log, not the seller's word.",
+  subtitle: "Cows and bulls from farms that keep their records on Khamar Khata. Weights, milk and vaccines are shown as the farm recorded them, with dates.",
   categories: { all: "All", qurbani: "Qurbani bulls", milking_cow: "Milking cows", heifer: "Heifers", breeding_bull: "Breeding bulls", other: "Other" },
   search: "Breed, farm or name",
   district: "District",
@@ -29,7 +29,11 @@ export const marketEn = {
   back: "All listings",
   sold: "Sold",
   facts: "From the farm's records",
-  factsNote: "Recorded by {farm} in Khamar Khata as it happened, not written for this listing.",
+  factsNote: "Entered by {farm} in Khamar Khata over time, not typed in for this listing.",
+  noCertify: "Khamar Khata shows the farm's own records. It doesn't inspect animals or certify health, age, breed or Qurbani suitability. See the animal before you buy.",
+  demo: "Demo listing",
+  demoNote: "This is a sample listing from the demo farm. The animal and its records are sample data, and no seller will reply to inquiries.",
+  demoFarm: "Demo farm, sample data",
   fact: {
     breed: "Breed",
     age: "Age",
@@ -136,7 +140,7 @@ export type MarketDict = typeof marketEn;
 
 export const marketBn: MarketDict = {
   title: "গরুর হাট",
-  subtitle: "যে খামারগুলো রেকর্ড রাখে, তাদের গাভী আর ষাঁড়। ওজন, দুধ আর টিকার তথ্য খামারের নিজের খাতা থেকে, বিক্রেতার মুখের কথা নয়।",
+  subtitle: "যে খামারগুলো খামার খাতায় রেকর্ড রাখে, তাদের গাভী আর ষাঁড়। ওজন, দুধ আর টিকার তথ্য খামার যেভাবে লিখেছে, তারিখসহ দেখানো হয়।",
   categories: { all: "সব", qurbani: "কোরবানির ষাঁড়", milking_cow: "দুধের গাভী", heifer: "বকনা", breeding_bull: "প্রজনন ষাঁড়", other: "অন্যান্য" },
   search: "জাত, খামার বা নাম",
   district: "জেলা",
@@ -164,7 +168,11 @@ export const marketBn: MarketDict = {
   back: "সব বিজ্ঞাপন",
   sold: "বিক্রি হয়েছে",
   facts: "খামারের রেকর্ড থেকে",
-  factsNote: "{farm} খামার খাতায় সময়মতো লিখেছে, এই বিজ্ঞাপনের জন্য আলাদা করে নয়।",
+  factsNote: "{farm} খামার খাতায় সময় ধরে লিখেছে, এই বিজ্ঞাপনের জন্য আলাদা করে নয়।",
+  noCertify: "খামার খাতা শুধু খামারের নিজের রেকর্ড দেখায়। পশু পরীক্ষা করে না, স্বাস্থ্য, বয়স, জাত বা কোরবানির উপযুক্ততার নিশ্চয়তা দেয় না। কেনার আগে নিজে দেখে নিন।",
+  demo: "ডেমো বিজ্ঞাপন",
+  demoNote: "এটি ডেমো খামারের নমুনা বিজ্ঞাপন। পশু আর তার রেকর্ড নমুনা তথ্য, জিজ্ঞাসার উত্তর কোনো বিক্রেতা দেবেন না।",
+  demoFarm: "ডেমো খামার, নমুনা তথ্য",
   fact: {
     breed: "জাত",
     age: "বয়স",

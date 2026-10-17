@@ -101,7 +101,8 @@ export const boardSql = (farmId: string, eidYear: number) =>
       from expenses where farm_id = ${farmId} and animal_id is not null group by animal_id
     ),
     health as (
-      select animal_id, sum(cost_tk)::float as cost, max(meat_withdrawal_until) as meat_until
+      -- treatment costs are already in the expense ledger (direct), so only the withdrawal date here
+      select animal_id, max(meat_withdrawal_until) as meat_until
       from health_events where farm_id = ${farmId} group by animal_id
     ),
     photo as (
@@ -113,7 +114,7 @@ export const boardSql = (farmId: string, eidYear: number) =>
       case when e.animal_id is not null then (l.kg - e.kg) / nullif(l.date - e.date, 0)
            else (l.kg - f.kg) / nullif(l.date - f.date, 0) end as adg,
       coalesce(d.cost, 0) + case when coalesce(d.has_purchase, false) then 0 else coalesce(b.purchase_price_tk, 0) end
-        + coalesce(fe.cost, 0) + coalesce(h.cost, 0) as cost,
+        + coalesce(fe.cost, 0) as cost,
       coalesce(fe.per_day, 0) as feed_per_day,
       h.meat_until::text as meat_until,
       exists (select 1 from listings li where li.animal_id = b.id and li.status = 'active') as listed

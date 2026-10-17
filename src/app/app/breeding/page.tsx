@@ -66,7 +66,7 @@ export default async function BreedingPage() {
     return (
       <li key={c.id} className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-line py-3 first:border-0">
         <span className="w-24 shrink-0 text-sm font-medium text-muted tabular">{n.date === today ? b.today : dayFmt.format(new Date(`${n.date}T00:00:00Z`))}</span>
-        <Link href={`/app/animals/${encodeURIComponent(c.tag)}`} className="flex min-w-0 flex-1 items-center gap-2 text-ink no-underline hover:text-primary">
+        <Link href={`/app/animals/${encodeURIComponent(c.tag)}`} className="flex min-w-[9rem] flex-1 items-center gap-2 text-ink no-underline hover:text-primary">
           <EarTag tag={c.tag} />
           <span className="truncate font-semibold">{name(c)}</span>
         </Link>

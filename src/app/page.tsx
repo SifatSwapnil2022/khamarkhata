@@ -107,7 +107,8 @@ export default async function HomePage() {
                     {h.ctaMarket}
                   </Link>
                 </div>
-                <p className="scroll-cue mt-8 hidden items-center gap-3 text-[15px] font-medium text-ink-2 lg:flex">
+                <p className="mt-5 max-w-[46ch] text-[13px] leading-snug text-muted">{h.demoData}</p>
+                <p className="scroll-cue mt-6 hidden items-center gap-3 text-[15px] font-medium text-ink-2 lg:flex">
                   <span aria-hidden="true" className="scroll-cue-line" />
                   {h.scroll}
                 </p>

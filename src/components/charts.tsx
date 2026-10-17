@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import Link from "next/link";
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 /*
  * Shared hand-built SVG charts for the section dashboards and reports.
@@ -10,7 +10,27 @@ import { useId, useState } from "react";
  * and a table view behind a toggle for anyone who can't use the picture.
  */
 
-const W = 900;
+const W0 = 900;
+
+/**
+ * Charts draw in real pixels of their box (measured), so labels stay 12px on a phone and in a
+ * narrow card alike, instead of shrinking with a fixed viewBox.
+ */
+function useChartWidth() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [w, setW] = useState(W0);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([e]) => {
+      const next = Math.round(e?.contentRect.width ?? W0);
+      if (next > 0) setW(next);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  return [ref, w] as const;
+}
 const H = 240;
 const PAD = { top: 16, right: 12, bottom: 28, left: 48 };
 
@@ -66,6 +86,7 @@ export function BarChart({
 }) {
   const [hover, setHover] = useState<number | null>(null);
   const hatch = useId();
+  const [box, W] = useChartWidth();
   if (data.length === 0) return null;
   const yMax = niceMax(Math.max(...data.map((d) => d.value)) * 1.08);
   const iw = W - PAD.left - PAD.right;
@@ -73,17 +94,20 @@ export function BarChart({
   const slot = iw / data.length;
   const bw = Math.max(2, Math.min(slot - 2, 56));
   const y = (v: number) => PAD.top + ih - (v / yMax) * ih;
+  const every = Math.max(1, Math.ceil(56 / slot));
   const ticks = [0, yMax / 2, yMax];
   const nf = (v: number, d = decimals) => v.toLocaleString(locale === "bn" ? "bn-BD" : "en-IN", { maximumFractionDigits: d });
   const fmt = (v: number) => `${prefix}${nf(v)}${unit ? ` ${unit}` : ""}`;
   const dense = data.length > 16;
+  const hasTicks = data.some((d) => d.tick !== undefined);
+  // Label every bar when there's room, otherwise every n-th (about 56px apart).
   const fill = `var(--${tone})`;
   const h = hover === null ? null : data[hover]!;
 
   return (
     <div>
       <div className="overflow-x-auto">
-        <div className={clsx("relative", dense && "min-w-[560px]")}>
+        <div ref={box} className={clsx("relative", dense && "min-w-[560px]")}>
           <svg viewBox={`0 0 ${W} ${height}`} className="block h-auto w-full" role="img" aria-label={name}>
             <defs>
               <pattern id={hatch} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
@@ -101,13 +125,13 @@ export function BarChart({
               </g>
             ))}
             {data.map((d, i) =>
-              !dense || d.tick ? (
+              (hasTicks && slot < 56 ? d.tick : i % every === 0) ? (
                 <text
                   key={`t-${i}`}
                   x={PAD.left + i * slot + slot / 2}
                   y={height - 8}
                   fontSize="12"
-                  textAnchor={dense ? "start" : "middle"}
+                  textAnchor={hasTicks && slot < 56 ? "start" : "middle"}
                   fill="var(--muted)"
                 >
                   {d.label}
@@ -242,5 +266,136 @@ export function RankBars({
         </li>
       ))}
     </ul>
+  );
+}
+
+/**
+ * Two series side by side per period (e.g. revenue and expenses by month). Two colours, so it
+ * carries a small legend; every bar has a tooltip, and the numbers are in a table behind a toggle.
+ */
+export function PairBars({
+  rows,
+  locale,
+  names,
+  tableToggle,
+  colLabel,
+  prefix = "৳",
+}: {
+  rows: { label: string; a: number; b: number }[];
+  locale: "bn" | "en";
+  names: [string, string];
+  tableToggle: string;
+  colLabel: string;
+  prefix?: string;
+}) {
+  const [hover, setHover] = useState<number | null>(null);
+  const [box, W] = useChartWidth();
+  if (rows.length === 0) return null;
+  const Hh = 220;
+  const yMax = niceMax(Math.max(1, ...rows.flatMap((r) => [r.a, r.b])) * 1.08);
+  const iw = W - PAD.left - PAD.right;
+  const ih = Hh - PAD.top - PAD.bottom;
+  const slot = iw / rows.length;
+  const bw = Math.min(34, (slot - 10) / 2);
+  const y = (v: number) => PAD.top + ih - (v / yMax) * ih;
+  const nf = (v: number) => v.toLocaleString(locale === "bn" ? "bn-BD" : "en-IN", { maximumFractionDigits: 0 });
+  const short = (v: number) =>
+    v >= 100_000 ? `${nf(Math.round(v / 10_000) / 10)}${locale === "bn" ? " লাখ" : "L"}` : v >= 1000 ? `${nf(Math.round(v / 100) / 10)}k` : nf(v);
+  const colors = ["var(--primary)", "#e07b39"];
+  const h = hover === null ? null : rows[hover]!;
+  return (
+    <div>
+      <div className="mb-2 flex flex-wrap gap-4 text-sm text-ink-2">
+        {names.map((n, i) => (
+          <span key={n} className="inline-flex items-center gap-2">
+            <span aria-hidden="true" className="size-3 rounded-[3px]" style={{ background: colors[i] }} />
+            {n}
+          </span>
+        ))}
+      </div>
+      <div ref={box} className="relative">
+        <svg viewBox={`0 0 ${W} ${Hh}`} className="block h-auto w-full" role="img" aria-label={names.join(" / ")}>
+          {[0, yMax / 2, yMax].map((t) => (
+            <g key={t}>
+              <line x1={PAD.left} x2={W - PAD.right} y1={y(t)} y2={y(t)} stroke="var(--line)" />
+              <text x={PAD.left - 8} y={y(t) + 4} textAnchor="end" fontSize="12" fill="var(--muted)">
+                {prefix}
+                {short(t)}
+              </text>
+            </g>
+          ))}
+          {rows.map((r, i) => {
+            const cx = PAD.left + i * slot + slot / 2;
+            return (
+              <g key={r.label} opacity={hover === null || hover === i ? 1 : 0.45}>
+                {[r.a, r.b].map((v, k) => {
+                  const x = cx - bw - 1 + k * (bw + 2);
+                  const top = y(v);
+                  const hgt = Math.max(0, PAD.top + ih - top);
+                  const rad = Math.min(4, bw / 2, hgt);
+                  return (
+                    <path
+                      key={k}
+                      d={`M${x},${PAD.top + ih} V${top + rad} Q${x},${top} ${x + rad},${top} H${x + bw - rad} Q${x + bw},${top} ${x + bw},${top + rad} V${PAD.top + ih} Z`}
+                      fill={colors[k]}
+                    />
+                  );
+                })}
+                <text x={cx} y={Hh - 8} fontSize="12" textAnchor="middle" fill="var(--muted)">
+                  {r.label}
+                </text>
+                <rect x={PAD.left + i * slot} y={PAD.top} width={slot} height={ih} fill="transparent" onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} />
+              </g>
+            );
+          })}
+        </svg>
+        {h && hover !== null ? (
+          <div
+            role="status"
+            className="pointer-events-none absolute top-2 z-10 min-w-40 rounded-xl bg-ink px-3 py-2 text-sm text-surface shadow-lg"
+            style={{ left: `${((PAD.left + hover * slot + slot / 2) / W) * 100}%`, transform: `translateX(${hover > rows.length * 0.6 ? "-105%" : "8px"})` }}
+          >
+            <p className="font-semibold">{h.label}</p>
+            <p className="tabular">
+              {names[0]}: {prefix}
+              {nf(h.a)}
+            </p>
+            <p className="tabular">
+              {names[1]}: {prefix}
+              {nf(h.b)}
+            </p>
+          </div>
+        ) : null}
+      </div>
+      <details className="mt-2 text-sm">
+        <summary className="inline-flex min-h-11 cursor-pointer items-center font-semibold text-primary">{tableToggle}</summary>
+        <div className="mt-2 overflow-auto rounded-xl border border-line">
+          <table className="w-full text-left tabular">
+            <thead>
+              <tr className="text-muted">
+                <th className="px-3 py-2 font-semibold">{colLabel}</th>
+                <th className="px-3 py-2 text-right font-semibold">{names[0]}</th>
+                <th className="px-3 py-2 text-right font-semibold">{names[1]}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.label} className="border-t border-line">
+                  <td className="px-3 py-1.5">{r.label}</td>
+                  <td className="px-3 py-1.5 text-right">
+                    {prefix}
+                    {nf(r.a)}
+                  </td>
+                  <td className="px-3 py-1.5 text-right">
+                    {prefix}
+                    {nf(r.b)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
   );
 }

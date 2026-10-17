@@ -4,6 +4,7 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getDb } from "@/db";
 import { LOCALE_COOKIE } from "@/i18n";
+import { DEMO_PHONES } from "@/lib/demo";
 import { maskPhone, normalizeBdPhone } from "@/lib/phone";
 import { clientIp, getSessionToken, safeNext } from "@/server/auth";
 import { listUserFarms } from "@/server/farms";
@@ -23,7 +24,8 @@ const showDebugCode = () =>
 export async function requestCodeAction(_prev: RequestCodeState, form: FormData): Promise<RequestCodeState> {
   const phone = String(form.get("phone") ?? "");
   const db = await getDb();
-  const res = await requestOtp(db, { phone, ip: await clientIp() }, { sms: getSmsProvider() });
+  const shared = process.env.DEMO_MODE === "true" && DEMO_PHONES.includes(normalizeBdPhone(phone) ?? "");
+  const res = await requestOtp(db, { phone, ip: await clientIp(), shared }, { sms: getSmsProvider() });
   if (!res.ok) return { step: "phone", error: res.error, retryAfterSec: res.retryAfterSec, phone };
   return {
     step: "code",

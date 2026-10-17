@@ -17,6 +17,15 @@ export function formatter(locale: "bn" | "en") {
       if (value == null || Number.isNaN(value)) return "—";
       return digits(value.toLocaleString("en-IN", { minimumFractionDigits: decimals, maximumFractionDigits: decimals }));
     },
+    /** Big taka amounts the way people say them: ৳29.2 lakh, ৳1.22 crore. Under a lakh, in full. */
+    tkShort(value: number | null | undefined) {
+      if (value == null) return "—";
+      const sign = value < 0 ? "−" : "";
+      const v = Math.abs(value);
+      if (v >= 10_000_000) return digits(`${sign}৳${(v / 10_000_000).toFixed(2)} ${bn ? "কোটি" : "crore"}`);
+      if (v >= 100_000) return digits(`${sign}৳${(v / 100_000).toFixed(1)} ${bn ? "লাখ" : "lakh"}`);
+      return digits(`${sign}৳${Math.round(v).toLocaleString("en-IN")}`);
+    },
     tk(value: number | null | undefined) {
       if (value == null) return "—";
       return digits(`৳${Math.round(value).toLocaleString("en-IN")}`);

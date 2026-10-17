@@ -490,6 +490,8 @@ export const expenses = pgTable(
     animalId: uuid().references(() => animals.id, { onDelete: "set null" }),
     shedId: uuid().references(() => sheds.id, { onDelete: "set null" }),
     note: text(),
+    /** "manual" for entries made in Finance; "health" when copied from a treatment or vaccination cost. */
+    source: text().notNull().default("manual"),
     createdAt: createdAt(),
   },
   (t) => [index().on(t.farmId, t.date)],

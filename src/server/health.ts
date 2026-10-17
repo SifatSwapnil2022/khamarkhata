@@ -2,7 +2,7 @@ import { and, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { DB } from "@/db/client";
 import { isoDate, num, rowsOf } from "@/db/rows";
-import { animals, healthEvents, vaccines } from "@/db/schema";
+import { animals, expenses, healthEvents, vaccines } from "@/db/schema";
 import { can } from "@/lib/rbac";
 import { err, ok } from "@/lib/result";
 import { addDays, audit, isoDay, refDay, zodFields, type Actor } from "./common";
@@ -237,6 +237,20 @@ export async function recordVaccination(db: DB, actor: Actor, input: z.input<typ
       recordedById: actor.userId,
     })),
   );
+  // The cost also goes into the expense ledger, so Finance counts it once.
+  if (v.costPerHeadTk) {
+    await db.insert(expenses).values(
+      herd.map((a) => ({
+        farmId: actor.farmId,
+        date: v.date,
+        category: "medicine" as const,
+        amountTk: v.costPerHeadTk!,
+        animalId: a.id,
+        note: vaccine.name,
+        source: "health",
+      })),
+    );
+  }
   await audit(db, actor, "health.vaccinate", "vaccine", vaccine.id, { date: v.date, animals: herd.length });
   return ok({ count: herd.length, vaccine: vaccine.name, next });
 }
@@ -291,6 +305,17 @@ export async function recordTreatment(db: DB, actor: Actor, input: z.input<typeo
       recordedById: actor.userId,
     })
     .returning({ id: healthEvents.id });
+  if (v.costTk) {
+    await db.insert(expenses).values({
+      farmId: actor.farmId,
+      date: v.date,
+      category: v.type === "vet_visit" ? "vet" : "medicine",
+      amountTk: v.costTk,
+      animalId: animal.id,
+      note: v.diagnosis ?? v.drug ?? v.type,
+      source: "health",
+    });
+  }
   await audit(db, actor, "health.treat", "health_event", row!.id, { tag: animal.tag });
   return ok({ tag: animal.tag });
 }

@@ -3,6 +3,7 @@ import { BadgeCheck, MapPin } from "lucide-react";
 import { AnimalPhoto } from "@/app/app/animals/AnimalPhoto";
 import { Badge } from "@/components/ui";
 import type { Dictionary } from "@/i18n";
+import { isDemoFarm } from "@/lib/demo";
 import { fill, type Fmt } from "@/lib/format";
 import type { ListingCard as Card } from "@/server/market";
 
@@ -31,6 +32,9 @@ export function ListingCard({ item, t, fmt, today, priority = false }: { item: C
         <span className="absolute top-3 left-3 rounded-full bg-white/95 px-2.5 py-1 text-[13px] font-semibold text-deep shadow-sm">
           {m.categories[item.category]}
         </span>
+        {isDemoFarm(item.farm) ? (
+          <span className="absolute top-3 right-3 rounded-full bg-[#0f2419]/80 px-2.5 py-1 text-[12px] font-semibold text-white">{m.demo}</span>
+        ) : null}
       </div>
       <div className="flex flex-1 flex-col gap-2 p-4">
         <p className="font-display text-[22px] leading-none font-extrabold tracking-[-0.02em] tabular">

@@ -1,5 +1,5 @@
 import { createHmac, randomInt, timingSafeEqual } from "node:crypto";
-import { and, desc, eq, gte, isNull, sql } from "drizzle-orm";
+import { and, desc, eq, gt, gte, isNull, sql } from "drizzle-orm";
 import type { DB } from "@/db/client";
 import { otpCodes, users } from "@/db/schema";
 import { normalizeBdPhone } from "@/lib/phone";
@@ -35,7 +35,16 @@ type RequestError = "invalid_phone" | "rate_limited";
 
 export async function requestOtp(
   db: DB,
-  input: { phone: string; ip?: string | null },
+  input: {
+    phone: string;
+    ip?: string | null;
+    /**
+     * A login many people share at once (the public demo farm). The per-phone limits and
+     * "newest code only" rule would let visitors lock each other out, so they're skipped;
+     * the per-IP limit still applies.
+     */
+    shared?: boolean;
+  },
   deps: { sms: SmsProvider; now?: Date },
 ): Promise<Result<{ phone: string; code: string; expiresAt: Date }, RequestError>> {
   const phone = normalizeBdPhone(input.phone);
@@ -50,14 +59,14 @@ export async function requestOtp(
     .where(and(eq(otpCodes.phone, phone), gte(otpCodes.createdAt, since(OTP_PHONE_WINDOW_SEC))))
     .orderBy(desc(otpCodes.createdAt));
 
-  const last = recent[0];
+  const last = input.shared ? undefined : recent[0];
   if (last) {
     const elapsed = (now.getTime() - last.createdAt.getTime()) / 1000;
     if (elapsed < OTP_RESEND_COOLDOWN_SEC) {
       return err("rate_limited", { retryAfterSec: Math.ceil(OTP_RESEND_COOLDOWN_SEC - elapsed) });
     }
   }
-  if (recent.length >= OTP_MAX_PER_PHONE) {
+  if (!input.shared && recent.length >= OTP_MAX_PER_PHONE) {
     const oldest = recent[recent.length - 1]!.createdAt.getTime();
     const retry = Math.ceil((oldest + OTP_PHONE_WINDOW_SEC * 1000 - now.getTime()) / 1000);
     return err("rate_limited", { retryAfterSec: Math.max(retry, 1) });
@@ -75,11 +84,13 @@ export async function requestOtp(
   const expiresAt = new Date(now.getTime() + OTP_TTL_SEC * 1000);
 
   await db.transaction(async (tx) => {
-    // Only the newest code for a phone is valid.
-    await tx
-      .update(otpCodes)
-      .set({ consumedAt: now })
-      .where(and(eq(otpCodes.phone, phone), isNull(otpCodes.consumedAt)));
+    // Only the newest code for a phone is valid (except on a shared demo login).
+    if (!input.shared) {
+      await tx
+        .update(otpCodes)
+        .set({ consumedAt: now })
+        .where(and(eq(otpCodes.phone, phone), isNull(otpCodes.consumedAt)));
+    }
     await tx.insert(otpCodes).values({
       phone,
       codeHash: hashOtp(phone, code),
@@ -106,12 +117,21 @@ export async function verifyOtp(
   if (code.length !== 6) return err("invalid_code");
   const now = deps.now ?? new Date();
 
-  const [row] = await db
+  // A live code with this exact hash wins; otherwise wrong attempts count against the newest code.
+  // Outside the shared demo login there is only ever one live code per phone, so this is the same row.
+  const [exact] = await db
     .select()
     .from(otpCodes)
-    .where(and(eq(otpCodes.phone, phone), isNull(otpCodes.consumedAt)))
-    .orderBy(desc(otpCodes.createdAt))
+    .where(and(eq(otpCodes.phone, phone), eq(otpCodes.codeHash, hashOtp(phone, code)), isNull(otpCodes.consumedAt), gt(otpCodes.expiresAt, now)))
     .limit(1);
+  const [row] = exact
+    ? [exact]
+    : await db
+        .select()
+        .from(otpCodes)
+        .where(and(eq(otpCodes.phone, phone), isNull(otpCodes.consumedAt)))
+        .orderBy(desc(otpCodes.createdAt))
+        .limit(1);
 
   if (!row) return err("expired");
   if (row.expiresAt <= now) return err("expired");

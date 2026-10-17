@@ -93,7 +93,7 @@ export default async function QurbaniPage({ searchParams }: { searchParams: Prom
                 href="/app/qurbani?f=behind"
               />
               {canMoney ? (
-                <StatCard icon={<Coins className="size-5" />} label={q.stats.margin} value={fmt.tk(margin)} note={q.stats.marginNote} tone={margin >= 0 ? "green" : "danger"} />
+                <StatCard icon={<Coins className="size-5" />} label={q.stats.margin} value={fmt.tkShort(margin)} note={q.stats.marginNote} tone={margin >= 0 ? "green" : "danger"} />
               ) : (
                 <StatCard icon={<Scale className="size-5" />} label={q.filters.stale} value={fmt.n(counts.stale)} tone={counts.stale ? "warn" : undefined} />
               )}

@@ -3,6 +3,7 @@ import { signOutAction } from "@/app/actions/auth";
 import { LangToggle } from "@/components/LangToggle";
 import { Logo } from "@/components/ui";
 import { getDictionary } from "@/i18n";
+import { isDemoFarm } from "@/lib/demo";
 import { formatBdPhone } from "@/lib/phone";
 import { requireFarm } from "@/server/auth";
 import { FarmSwitcher } from "./FarmSwitcher";
@@ -58,6 +59,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </div>
       </header>
 
+      {isDemoFarm(ctx.farm.name) ? (
+        <p role="note" className="border-b border-[#f3d2b8] bg-warn-bg py-2 text-[13px] font-medium text-warn-ink">
+          <span className="page-column block">{t.common.demoFarmBanner}</span>
+        </p>
+      ) : null}
       <main id="main">{children}</main>
 
       <TabBar items={tabItems(ctx.role, t)} label={t.nav.farm} />

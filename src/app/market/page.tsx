@@ -115,9 +115,12 @@ export default async function MarketPage({ searchParams }: { searchParams: Promi
             </div>
           </form>
 
-          <p className="text-[15px] font-medium text-ink-2" aria-live="polite">
-            {fill(m.results, { n: fmt.n(total) })}
-          </p>
+          <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+            <p className="text-[15px] font-medium text-ink-2" aria-live="polite">
+              {fill(m.results, { n: fmt.n(total) })}
+            </p>
+            <p className="max-w-2xl text-[13px] text-muted">{m.noCertify}</p>
+          </div>
 
           {items.length === 0 ? (
             <Card className="py-12 text-center">
