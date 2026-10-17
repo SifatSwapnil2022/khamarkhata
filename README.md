@@ -8,14 +8,17 @@ Farm records for Bangladeshi cattle farms. It covers three segments:
 
 The goal is that every animal has its full history on record: mother and father, vaccines, treatments, weigh-ins and sale.
 
-> Status: **Phase 2 of 10.** Live today:
-> - phone sign-in
-> - farms
-> - team roles and invites
-> - Bangla/English
-> - animal records: herd list with filters, profiles with milk and weight charts, pedigree, breeding and health history, add/edit/record a sale
+> Status: live at https://khamarkhata.netlify.app. Done so far:
+> - **3D home page:** a Three.js day on a Jamuna char, with the demo farm's real records on the animals
+> - phone sign-in, farms, team roles, Bangla/English
+> - **Animals:** list, profiles, pedigree
+> - **Dairy:** milking sheet that works offline, sales and dues
+> - **Health:** due list, group vaccination, withdrawal periods
+> - **Breeding:** calendar, fertility numbers, sires, inbreeding warning
+> - **Qurbani:** fattening board with Eid projections, cost and margin; weigh-ins by scale or tape
+> - **Cattle market:** listings built from farm records, buyer inquiries
 >
-> The full data model for later phases is already in place. Daily milk entry is next.
+> Next: reports and CSV export.
 
 | Animals | Cow profile | Qurbani bull |
 |---|---|---|
