@@ -1,4 +1,6 @@
+import { homeEn } from "./home";
 import { animalsEn } from "./animals";
+import { marketEn } from "./market";
 import { qurbaniEn } from "./qurbani";
 import { breedingEn } from "./breeding";
 import { healthEn } from "./health";
@@ -10,6 +12,7 @@ export const en = {
   health: healthEn,
   breeding: breedingEn,
   qurbani: qurbaniEn,
+  market: marketEn,
   common: {
     appName: "Khamar Khata",
     appNameAlt: "খামার খাতা",
@@ -27,27 +30,7 @@ export const en = {
     required: "Required",
     somethingWrong: "Something went wrong. Please try again.",
   },
-  home: {
-    eyebrow: "Dairy · Breeding · Qurbani",
-    title: "Every cow on your farm, on record.",
-    lede: "Milk, vaccines, calves, mother and father, weight gain before Eid. Khamar Khata keeps the whole history of each animal, so you decide with numbers instead of memory.",
-    cta: "Start with your phone number",
-    segments: [
-      {
-        title: "Dairy",
-        body: "Morning and evening milk per cow, lactation day, and who you sold it to.",
-      },
-      {
-        title: "Breeding",
-        body: "Heat, AI, pregnancy checks and calving dates worked out for you from your own farm's rules.",
-      },
-      {
-        title: "Qurbani",
-        body: "Weigh-ins, daily gain and a projected weight for Eid, so a slow bull gets noticed in time.",
-      },
-    ],
-    building: "Khamar Khata is being built in the open. Sign-in, farms and team roles are live; animal records come next.",
-  },
+  home: homeEn,
   login: {
     photoBy: "Photo:",
     title: "Sign in with your phone",

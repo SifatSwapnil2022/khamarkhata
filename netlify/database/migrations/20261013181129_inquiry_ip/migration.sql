@@ -1,0 +1,1 @@
+ALTER TABLE "inquiries" ADD COLUMN "ip_hash" text;

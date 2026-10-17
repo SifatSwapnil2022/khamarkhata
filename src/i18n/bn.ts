@@ -1,4 +1,6 @@
+import { homeBn } from "./home";
 import { animalsBn } from "./animals";
+import { marketBn } from "./market";
 import { qurbaniBn } from "./qurbani";
 import { breedingBn } from "./breeding";
 import { healthBn } from "./health";
@@ -11,6 +13,7 @@ export const bn: Dictionary = {
   health: healthBn,
   breeding: breedingBn,
   qurbani: qurbaniBn,
+  market: marketBn,
   common: {
     appName: "খামার খাতা",
     appNameAlt: "Khamar Khata",
@@ -28,24 +31,7 @@ export const bn: Dictionary = {
     required: "আবশ্যক",
     somethingWrong: "কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।",
   },
-  home: {
-    eyebrow: "দুধ · প্রজনন · কোরবানি",
-    title: "খামারের প্রতিটি গরুর পুরো হিসাব, এক জায়গায়।",
-    lede: "দুধ, টিকা, বাছুর, মা-বাবা, ঈদের আগে ওজন বৃদ্ধি — প্রতিটি পশুর পুরো ইতিহাস খামার খাতায় থাকে, যাতে আপনি মনে রেখে নয়, হিসাব দেখে সিদ্ধান্ত নিতে পারেন।",
-    cta: "মোবাইল নম্বর দিয়ে শুরু করুন",
-    segments: [
-      { title: "দুধ", body: "প্রতিটি গাভীর সকাল-বিকালের দুধ, দুধ দেওয়ার দিন, আর কাকে বিক্রি করলেন।" },
-      {
-        title: "প্রজনন",
-        body: "গরম হওয়া, কৃত্রিম প্রজনন, গর্ভ পরীক্ষা আর বাছুর হওয়ার তারিখ — আপনার খামারের নিয়মে হিসাব হয়ে যায়।",
-      },
-      {
-        title: "কোরবানি",
-        body: "ওজন, দৈনিক বৃদ্ধি আর ঈদের দিনের সম্ভাব্য ওজন — পিছিয়ে থাকা ষাঁড় সময়মতো চোখে পড়ে।",
-      },
-    ],
-    building: "খামার খাতা ধাপে ধাপে তৈরি হচ্ছে। লগইন, খামার আর টিমের ভূমিকা চালু আছে; পশুর রেকর্ড আসছে পরের ধাপে।",
-  },
+  home: homeBn,
   login: {
     photoBy: "ছবি:",
     title: "মোবাইল নম্বর দিয়ে লগইন",

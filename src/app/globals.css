@@ -224,3 +224,129 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ───────────────────────── Home: the farm scene ───────────────────────── */
+
+@layer components {
+  /* The Bangla name is the hero's picture as much as its title. */
+  .hero-wordmark {
+    font-family: "Noto Sans Bengali Variable", var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.7rem, 8.6vw, 7.75rem);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+  }
+
+  .scroll-cue-line {
+    position: relative;
+    display: block;
+    width: 3.5rem;
+    height: 2px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: color-mix(in oklab, var(--ink) 18%, transparent);
+  }
+  .scroll-cue-line::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--primary);
+    transform: translateX(-100%);
+    animation: cue 2.4s var(--ease-out-quint) infinite;
+  }
+
+  .beat-panel {
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 18px 50px rgb(8 30 20 / 0.12);
+  }
+
+  /* Ear tags float over the animals, punched like the real plastic tags. */
+  .ear-tag {
+    opacity: 0;
+    transition: opacity 280ms ease;
+  }
+  .ear-tag[data-on="true"] {
+    opacity: 1;
+  }
+  .ear-tag-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 7.5rem;
+    max-width: 15rem;
+    padding: 0.6rem 0.8rem 0.55rem 1.55rem;
+    border-radius: 12px 12px 12px 4px;
+    background: rgb(255 255 255 / 0.95);
+    box-shadow: 0 8px 22px rgb(8 30 20 / 0.18);
+    transform: translate(-0.6rem, calc(-100% - 14px));
+    font-family: var(--font-sans);
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  .ear-tag-card::before {
+    content: "";
+    position: absolute;
+    left: 0.6rem;
+    top: 0.72rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--tag-hole, var(--primary));
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--tag-hole, var(--primary)) 22%, transparent);
+  }
+  .ear-tag-card::after {
+    content: "";
+    position: absolute;
+    left: 0.6rem;
+    bottom: -14px;
+    width: 2px;
+    height: 14px;
+    background: rgb(255 255 255 / 0.9);
+  }
+  .ear-tag[data-flip="true"] .ear-tag-card {
+    transform: translate(calc(-100% + 0.6rem), calc(-100% - 14px));
+    border-radius: 12px 12px 4px 12px;
+  }
+  .ear-tag[data-flip="true"] .ear-tag-card::after {
+    left: auto;
+    right: 0.6rem;
+  }
+  .ear-tag-card[data-tone="kin"] {
+    --tag-hole: #19a35f;
+  }
+  .ear-tag-card[data-tone="sire"] {
+    --tag-hole: #5b6cff;
+  }
+  .ear-tag-card[data-tone="weight"] {
+    --tag-hole: #f07b3f;
+  }
+  .ear-tag-id {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 14px;
+    color: #0f2419;
+  }
+  .ear-tag-line {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #4a5d52;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .photo-strip {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(255 255 255 / 0.3) transparent;
+  }
+}
+
+@keyframes cue {
+  0% {
+    transform: translateX(-100%);
+  }
+  60%,
+  100% {
+    transform: translateX(100%);
+  }
+}

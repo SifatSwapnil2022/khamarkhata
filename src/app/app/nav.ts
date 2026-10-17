@@ -14,7 +14,7 @@ export function navGroups(role: Role, t: Dictionary): NavGroup[] {
 
   const business: NavItem[] = [];
   if (can(role, "listing.manage")) business.push({ href: "/app/market", label: t.nav.marketplace, icon: "market" });
-  if (can(role, "reports.view")) business.push({ href: "/app/reports", label: t.nav.reports, icon: "reports" });
+  // Reports ship in the next release; the link appears when the page does.
 
   const farm: NavItem[] = [];
   if (can(role, "team.view")) farm.push({ href: "/app/team", label: t.nav.team, icon: "team" });

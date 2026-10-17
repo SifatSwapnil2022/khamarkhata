@@ -7,7 +7,7 @@ import type { Dictionary } from "@/i18n/en";
 
 type T = Dictionary["login"];
 
-export function LoginFlow({ t, next }: { t: T; next: string }) {
+export function LoginFlow({ t, next, initialPhone = "" }: { t: T; next: string; initialPhone?: string }) {
   const [reqState, requestCode, requesting] = useActionState<RequestCodeState, FormData>(requestCodeAction, {
     step: "phone",
   });
@@ -44,7 +44,7 @@ export function LoginFlow({ t, next }: { t: T; next: string }) {
           inputMode="tel"
           autoComplete="tel-national"
           placeholder="01XXX-XXXXXX"
-          defaultValue={reqState.step === "phone" ? reqState.phone : reqState.phone.replace(/^\+88/, "")}
+          defaultValue={reqState.step === "phone" ? (reqState.phone ?? initialPhone) : reqState.phone.replace(/^\+88/, "")}
           required
           aria-invalid={Boolean(error)}
           aria-describedby={error ? "phone-error" : "phone-hint"}

@@ -11,7 +11,7 @@ import { LoginFlow } from "./LoginFlow";
 
 export const metadata: Metadata = { title: "Sign in" };
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string; demo?: string }> }) {
   const [{ locale, t }, current, params] = await Promise.all([getDictionary(), getCurrentUser(), searchParams]);
   if (current) redirect("/app");
   const next = safeNext(params.next);
@@ -55,7 +55,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
               <Notice tone="warn">{t.login.demoBanner}</Notice>
             </div>
           ) : null}
-          <LoginFlow t={t.login} next={next} />
+          <LoginFlow t={t.login} next={next} initialPhone={params.demo === "1" && process.env.DEMO_MODE === "true" ? "01700-000001" : ""} />
         </div>
       </main>
     </div>

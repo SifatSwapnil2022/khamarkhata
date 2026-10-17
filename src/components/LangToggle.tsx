@@ -8,11 +8,14 @@ export function LangToggle({
   path,
   label,
   tone = "light",
+  compact = false,
 }: {
   locale: Locale;
   path: string;
   label: string;
   tone?: "light" | "dark";
+  /** Icon only on phones. */
+  compact?: boolean;
 }) {
   const next = locale === "bn" ? "en" : "bn";
   return (
@@ -30,7 +33,7 @@ export function LangToggle({
         )}
       >
         <Languages aria-hidden="true" className="size-4" />
-        {label}
+        <span className={compact ? "max-sm:sr-only" : undefined}>{label}</span>
       </button>
     </form>
   );

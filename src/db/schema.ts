@@ -545,6 +545,8 @@ export const inquiries = pgTable("inquiries", {
   phone: text().notNull(),
   message: text(),
   status: inquiryStatusEnum().notNull().default("new"),
+  /** Keyed hash of the sender's IP, only for rate limiting. */
+  ipHash: text(),
   createdAt: createdAt(),
 });
 
