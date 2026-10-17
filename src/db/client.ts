@@ -21,11 +21,16 @@ function runningOnNetlify() {
   return Boolean((globalThis as NetlifyGlobal).Netlify) || process.env.NETLIFY === "true" || Boolean(process.env.SITE_ID);
 }
 
+/** Serverless hosts (Netlify, Vercel) have a read-only filesystem and many short-lived instances. */
+function runningServerless() {
+  return runningOnNetlify() || Boolean(process.env.VERCEL);
+}
+
 /**
  * Which database to use:
  * - "memory": throwaway in-memory Postgres (tests)
  * - Netlify Database when NETLIFY_DB_URL is available; migrations are applied by the deploy
- * - postgres://…: any other Postgres server
+ * - postgres://…: any other Postgres server, e.g. Neon on Vercel
  * - unset or "pglite": embedded Postgres in ./.data/pglite (local dev only — never on Netlify,
  *   where the filesystem is read-only and every function instance would get its own database)
  */
@@ -44,7 +49,17 @@ export async function createDb(
   if (url && url.startsWith("postgres")) {
     const { default: postgres } = await import("postgres");
     const { drizzle } = await import("drizzle-orm/postgres-js");
-    const db = drizzle({ client: postgres(url, { max: 10 }), casing: "snake_case" });
+    // On serverless each instance keeps one connection; through a pooler (Neon's "-pooler" host,
+    // PgBouncer in transaction mode) prepared statements must be off.
+    const serverless = runningServerless();
+    const client = postgres(url, {
+      max: serverless ? 1 : 10,
+      prepare: !url.includes("-pooler"),
+      idle_timeout: serverless ? 20 : undefined,
+      connect_timeout: 15,
+      onnotice: () => {},
+    });
+    const db = drizzle({ client, casing: "snake_case" });
     if (opts.migrate) {
       const { migrate } = await import("drizzle-orm/postgres-js/migrator");
       await migrate(db, { migrationsFolder: MIGRATIONS });
@@ -52,9 +67,11 @@ export async function createDb(
     return db as unknown as DB;
   }
 
-  if (url !== "memory" && runningOnNetlify()) {
+  if (url !== "memory" && runningServerless()) {
     throw new Error(
-      "No database configured: NETLIFY_DB_URL is not available. Check that Netlify Database is enabled for this project.",
+      runningOnNetlify()
+        ? "No database configured: NETLIFY_DB_URL is not available. Check that Netlify Database is enabled for this project."
+        : "No database configured: set DATABASE_URL to a postgres:// connection string (for example from Neon).",
     );
   }
 

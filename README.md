@@ -78,6 +78,14 @@ npm run db:migrate
 npm run dev
 ```
 
+## Deploy on Vercel
+
+1. Create a free Postgres on [Neon](https://neon.tech) (region: Singapore) and copy its connection string.
+2. Import the GitHub repo on [Vercel](https://vercel.com/new). Framework: Next.js.
+3. Add environment variables: `DATABASE_URL` (Neon, pooled), `DATABASE_URL_UNPOOLED` (Neon, direct; optional),
+   `OTP_SECRET` (32+ random characters), `SMS_PROVIDER=console`, `DEMO_MODE=true`.
+4. Deploy. The `vercel-build` script applies the migrations (schema and demo farm) to Neon before building.
+
 ## Scripts
 
 | Script | What it does |
