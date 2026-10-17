@@ -47,6 +47,9 @@ export async function createDb(
   }
 
   if (url && url.startsWith("postgres")) {
+    // Neon's copy-paste strings add channel_binding=require, which postgres-js doesn't understand
+    // (it would be sent to the server as a setting and refused). TLS still applies via sslmode.
+    url = url.replace(/([?&])channel_binding=[^&]*&?/, "$1").replace(/[?&]$/, "");
     const { default: postgres } = await import("postgres");
     const { drizzle } = await import("drizzle-orm/postgres-js");
     // On serverless each instance keeps one connection; through a pooler (Neon's "-pooler" host,
